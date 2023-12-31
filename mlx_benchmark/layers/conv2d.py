@@ -1,3 +1,4 @@
+import torch
 import mlx.core as mx
 import mlx.nn as mx_nn
 import torch.nn as torch_nn
@@ -31,6 +32,7 @@ class Conv2d(BaseBenchmark):
         y = layer(data)
         mx.eval(y)
 
+    @torch.no_grad()
     def forward_torch(self, data, **kwargs):
         in_dim = data.shape[1]
         layer = torch_nn.Conv2d(

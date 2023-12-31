@@ -1,3 +1,4 @@
+import torch
 import mlx.core as mx
 import mlx.nn as mx_nn
 import torch.nn as torch_nn
@@ -22,6 +23,7 @@ class Linear(BaseBenchmark):
         layer = mx_nn.Linear(in_dim, self.hid)
         mx.eval(layer(data))
 
+    @torch.no_grad()
     def forward_torch(self, data, **kwargs):
         in_dim = data.shape[-1]
         layer = torch_nn.Linear(in_dim, self.hid).to(self.device)

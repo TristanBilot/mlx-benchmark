@@ -1,3 +1,5 @@
+import gc
+import multiprocessing as mp
 from argparse import ArgumentParser
 from collections import defaultdict
 
@@ -13,32 +15,60 @@ from layers import (
 )
 
 
-def run(layers, args):
-    times = defaultdict(dict)
+def run_processes(layers, args):
+    """
+    Runs all layers (i.e. operations) in serial, on separate processes.
+    Using processes avoids exploding memory within the main process during the bench.
+    """
+    all_times = defaultdict(dict)
+    queue = mp.Queue()
+
     for layer in tqdm(layers, total=len(layers)):
-        layer_name = type(layer).__name__ + " / " + layer.args_str
+        p = mp.Process(target=run, args=(layer, args, queue))
+        p.start()
 
-        # MLX benchmark.
-        if args.include_mlx:
-            mlx_time = layer.run(framework="mlx")
-            times[layer_name]["mlx"] = mlx_time
+        times = queue.get()
+        p.join()
 
-        # CPU PyTorch benchmarks.
-        if args.include_cpu:
-            cpu_time = layer.run(framework="torch", device=torch.device("cpu"))
-            times[layer_name]["cpu"] = cpu_time
+        # NOTE: without this, memory still increases until the end of the bench.
+        del layer
+        gc.collect()
 
-        # MPS PyTorch benchmarks.
-        if args.include_mps:
-            mps_time = layer.run(framework="torch", device=torch.device("mps"))
-            times[layer_name]["mps"] = mps_time
+        all_times.update(times)
 
-        # CUDA PyTorch benchmark.
-        if args.include_cuda:
-            cuda_time = layer.run(framework="torch", device=torch.device("cuda"))
-            times[layer_name]["cuda"] = cuda_time
+    print_benchmark(all_times, args)
 
-    print_benchmark(times, args)
+
+def run(layer, args, queue=None):
+    """
+    Measures runtime of a single layer on all frameworks and devices included in args.
+    """
+    times = times = defaultdict(dict)
+    layer_name = type(layer).__name__ + " / " + layer.args_str
+
+    # MLX benchmark.
+    if args.include_mlx:
+        mlx_time = layer.run(framework="mlx")
+        times[layer_name]["mlx"] = mlx_time
+
+    # CPU PyTorch benchmarks.
+    if args.include_cpu:
+        cpu_time = layer.run(framework="torch", device=torch.device("cpu"))
+        times[layer_name]["cpu"] = cpu_time
+
+    # MPS PyTorch benchmarks.
+    if args.include_mps:
+        mps_time = layer.run(framework="torch", device=torch.device("mps"))
+        times[layer_name]["mps"] = mps_time
+
+    # CUDA PyTorch benchmark.
+    if args.include_cuda:
+        cuda_time = layer.run(framework="torch", device=torch.device("cuda"))
+        times[layer_name]["cuda"] = cuda_time
+
+    if queue is None:
+        return times
+    queue.put(times)
 
 
 if __name__ == "__main__":
@@ -48,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument("--include_mlx", type=bool, default=True)
     parser.add_argument("--include_cuda", type=bool, default=False)
     args = parser.parse_args()
+    print(args)
 
     if args.include_cuda:
         assert torch.cuda.is_available(), "CUDA device not found."
@@ -79,4 +110,4 @@ if __name__ == "__main__":
         MatMul(dim="10x100x64x1024"),
     ]
 
-    run(layers, args)
+    run_processes(layers, args)

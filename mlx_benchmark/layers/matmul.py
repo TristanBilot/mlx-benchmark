@@ -31,6 +31,7 @@ class MatMul(BaseBenchmark):
         y = data @ mat2
         mx.eval(y)
 
+    @torch.no_grad()
     def forward_torch(self, data, **kwargs):
         mat2 = (
             data.reshape(

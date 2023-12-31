@@ -1,3 +1,4 @@
+import multiprocessing as mp
 from time import time
 from typing import Tuple
 
@@ -62,7 +63,7 @@ class BaseBenchmark:
         else:
             raise ValueError("Invalid framework.")
 
-        # Measure runtimes for n iterations.
+        # Measures runtime for n iterations.
         mean_duration = np.mean(
             [
                 self._measure_runtime(forward_fn, data, **kwargs)
