@@ -12,6 +12,7 @@ from layers import (
     Conv2d,
     MatMul,
     Softmax,
+    BCE,
 )
 
 
@@ -108,6 +109,10 @@ if __name__ == "__main__":
         MatMul(dim="1000x64x1024"),
         MatMul(dim="1000x1024x64"),
         MatMul(dim="10x100x64x1024"),
+        BCE(dim="1000000"),
+        BCE(dim="100000x32"),
+        BCE(dim="100000x64x2"),
+        BCE(dim="128x100000"),
     ]
 
     run_processes(layers, args)
