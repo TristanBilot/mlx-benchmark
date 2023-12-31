@@ -1,6 +1,9 @@
+from config import USE_MLX
+if USE_MLX:
+    import mlx.core as mx
+
 import torch
 import torch.nn.functional as F
-import mlx.core as mx
 
 from base_benchmark import BaseBenchmark
 

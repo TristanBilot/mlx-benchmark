@@ -38,7 +38,7 @@ def print_benchmark(times, args):
 
     prev_layer = ""
     for layer, times in times.items():
-        times_str = " | ".join(f"{int(times[header]):>4}" for header in headers)
+        times_str = " | ".join(f"{round(times[header],2):>4}" for header in headers)
 
         if layer[:5] != prev_layer[:5]:
             print(header_line)

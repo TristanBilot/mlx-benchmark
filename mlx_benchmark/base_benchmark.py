@@ -2,7 +2,10 @@ import multiprocessing as mp
 from time import time
 from typing import Tuple
 
-import mlx.core as mx
+from config import USE_MLX
+if USE_MLX:
+    import mlx.core as mx
+
 import numpy as np
 import torch
 
@@ -73,7 +76,7 @@ class BaseBenchmark:
         # [1:] is used to remove the first measure, usually slower
         # due to cold start.
 
-        mean_duration_ms = np.round(mean_duration * 1000)
+        mean_duration_ms = np.round(mean_duration * 1000, 2)
         return mean_duration_ms
 
     def _measure_runtime(self, fn, data, **kwargs) -> float:
