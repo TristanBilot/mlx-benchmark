@@ -28,11 +28,20 @@ def print_benchmark(times, args):
 
     max_name_length = max(len(name) for name in times.keys())
 
-    header_row = "Layer" + " " * (max_name_length - 5) + " | " + " | ".join(headers)
+    padded_headers = [f"{h:<4}" for h in headers]
+    header_row = (
+        "Layer" + " " * (max_name_length - 5) + " | " + " | ".join(padded_headers)
+    )
+    header_line = "-" * len(header_row)
+
     print(header_row)
 
-    print("-" * len(header_row))
-
+    prev_layer = ""
     for layer, times in times.items():
-        times_str = " | ".join(f"{times[header]:.2f}" for header in headers)
+        times_str = " | ".join(f"{int(times[header]):>4}" for header in headers)
+
+        if layer[:5] != prev_layer[:5]:
+            print(header_line)
+        prev_layer = layer
+
         print(f"{layer.ljust(max_name_length)} | {times_str}")
