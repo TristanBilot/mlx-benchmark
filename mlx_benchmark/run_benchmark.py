@@ -2,6 +2,7 @@ import gc
 import multiprocessing as mp
 from argparse import ArgumentParser
 from collections import defaultdict
+from distutils.util import strtobool
 
 import torch
 from tqdm import tqdm
@@ -74,10 +75,10 @@ def run(layer, args, queue=None):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--include_cpu", type=bool, default=True)
-    parser.add_argument("--include_mps", type=bool, default=True)
-    parser.add_argument("--include_mlx", type=bool, default=True)
-    parser.add_argument("--include_cuda", type=bool, default=False)
+    parser.add_argument("--include_cpu", type=strtobool, default="True")
+    parser.add_argument("--include_mps", type=strtobool, default="True")
+    parser.add_argument("--include_mlx", type=strtobool, default="True")
+    parser.add_argument("--include_cuda", type=strtobool, default="False")
     args = parser.parse_args()
     print(args)
 
