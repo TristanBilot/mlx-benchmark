@@ -9,6 +9,7 @@ from layers import (
     Linear,
     Conv2d,
     MatMul,
+    Softmax,
 )
 
 
@@ -55,18 +56,27 @@ if __name__ == "__main__":
         assert torch.backends.mps.is_available(), "MPS backend not available."
 
     layers = [
+        Softmax(dim="64x1000000"),
+        Softmax(dim="1000000x64"),
+        Softmax(dim="64x16x32x1024"),
+        Softmax(dim="128x16x32x1024"),
+        Softmax(dim="1024x16x32x128"),
+        Softmax(dim="1024x64x32x8"),
+        Linear(hid=32),
+        Linear(hid=64),
+        Linear(hid=128),
+        Linear(hid=256),
+        Conv2d(hid=32, channels=2),
+        Conv2d(hid=32, channels=10),
+        Conv2d(hid=32, channels=100),
+        Conv2d(hid=64, channels=2),
+        Conv2d(hid=64, channels=10),
+        Conv2d(hid=64, channels=100),
         MatMul(dim="64x256"),
         MatMul(dim="1000x64x256"),
         MatMul(dim="1000x64x1024"),
         MatMul(dim="1000x1024x64"),
-        MatMul(dim="10x100x1024x64"),
         MatMul(dim="10x100x64x1024"),
-        Linear(hid=32),
-        Linear(hid=64),
-        Linear(hid=128),
-        Conv2d(hid=32, channels=2),
-        Conv2d(hid=32, channels=10),
-        Conv2d(hid=32, channels=100),
     ]
 
     run(layers, args)
