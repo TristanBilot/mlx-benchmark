@@ -8,6 +8,7 @@ from utils import print_benchmark
 from layers import (
     Linear,
     Conv2d,
+    MatMul,
 )
 
 
@@ -54,6 +55,12 @@ if __name__ == "__main__":
         assert torch.backends.mps.is_available(), "MPS backend not available."
 
     layers = [
+        MatMul(dim="64x256"),
+        MatMul(dim="1000x64x256"),
+        MatMul(dim="1000x64x1024"),
+        MatMul(dim="1000x1024x64"),
+        MatMul(dim="10x100x1024x64"),
+        MatMul(dim="10x100x64x1024"),
         Linear(hid=32),
         Linear(hid=64),
         Linear(hid=128),

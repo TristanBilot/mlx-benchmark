@@ -62,12 +62,15 @@ class BaseBenchmark:
         else:
             raise ValueError("Invalid framework.")
 
+        # Measure runtimes for n iterations.
         mean_duration = np.mean(
             [
                 self._measure_runtime(forward_fn, data, **kwargs)
-                for _ in range(iterations)
-            ]
+                for _ in range(iterations + 1)
+            ][1:]
         )
+        # [1:] is used to remove the first measure, usually slower
+        # due to cold start.
 
         mean_duration_ms = np.round(mean_duration * 1000)
         return mean_duration_ms
