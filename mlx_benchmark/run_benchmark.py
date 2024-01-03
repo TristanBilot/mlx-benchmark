@@ -144,6 +144,10 @@ if __name__ == "__main__":
         Sum(dim1="64x128x128x128", axis=1),
         Sum(dim1="64x128x128x128", axis=2),
         Sum(dim1="64x128x128x128", axis=3),
+        Argmax(dim1="64x1024x128", axis=0),
+        Argmax(dim1="64x1024x128", axis=1),
+        Argmax(dim1="64x1024x128", axis=2),
+        Argmax(dim1="64x128x1024", axis=2),
     ]
 
     run_processes(operations, args)

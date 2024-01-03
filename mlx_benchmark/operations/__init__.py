@@ -5,3 +5,4 @@ from .softmax import Softmax
 from .binary_cross_entropy import BCE
 from .concat import Concat
 from .sum import Sum, SumAll
+from .argmax import Argmax
