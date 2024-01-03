@@ -13,7 +13,7 @@ import torch
 
 class BaseBenchmark:
     """
-    Base class for benchmarking different layers or models.
+    Base class for benchmarking different operations or layers.
     """
 
     def __init__(self, **kwargs):

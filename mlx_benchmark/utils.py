@@ -21,9 +21,9 @@ def print_benchmark(times, args, reduce_mean=False):
     if reduce_mean:
         new_times = defaultdict(lambda: defaultdict(list))
         for k, v in times.items():
-            layer = k.split("/")[0]
+            op = k.split("/")[0]
             for backend, runtime in v.items():
-                new_times[layer][backend].append(runtime)
+                new_times[op][backend].append(runtime)
 
         for k, v in new_times.items():
             for backend, runtimes in v.items():
@@ -63,8 +63,8 @@ def print_benchmark(times, args, reduce_mean=False):
     print(header_row)
     print(header_line)
 
-    for layer, times in times.items():
+    for op, times in times.items():
         times_str = " | ".join(f"{times[header]:>6.2f}" for header in headers)
 
         # Formatting each row
-        print(f"| {layer.ljust(max_name_length)} | {times_str} |")
+        print(f"| {op.ljust(max_name_length)} | {times_str} |")
