@@ -14,13 +14,18 @@ import torch
 from tqdm import tqdm
 
 from config import USE_MLX
+
+if USE_MLX:
+    import mlx.core as mx
+    import mlx.nn as mx_nn
+
 from utils import print_benchmark
 from operations import *
 
 
 def run_processes(operations, args):
     """
-    Runs all operations (i.e. operations) in serial, on separate processes.
+    Runs all operations in serial, on separate processes.
     Using processes avoids exploding memory within the main process during the bench.
     """
     all_times = defaultdict(dict)
@@ -54,8 +59,15 @@ def run(op, args, queue=None):
 
     # MLX benchmark.
     if args.include_mlx:
+        # GPU
+        mx.set_default_device(mx.gpu)
         mlx_time = op.run(framework="mlx")
-        times[op_name]["mlx"] = mlx_time
+        times[op_name]["mlx_gpu"] = mlx_time
+
+        # CPU
+        mx.set_default_device(mx.cpu)
+        mlx_time = op.run(framework="mlx")
+        times[op_name]["mlx_cpu"] = mlx_time
 
     # CPU PyTorch benchmarks.
     if args.include_cpu:

@@ -32,28 +32,33 @@ def print_benchmark(times, args, reduce_mean=False):
 
     # Column headers
     headers = []
-    if args.include_cpu:
-        headers.append("cpu")
+    if args.include_mlx:
+        headers.append("mlx_gpu")
+        headers.append("mlx_cpu")
     if args.include_mps:
         headers.append("mps")
-    if args.include_mlx:
-        headers.append("mlx")
+    if args.include_cpu:
+        headers.append("cpu")
     if args.include_cuda:
         headers.append("cuda")
+
     if args.include_mps and args.include_mlx:
-        headers.append("mps/mlx speedup (%)")
+        h = "mps/mlx_gpu speedup"
+        headers.append(h)
         for k, v in times.items():
-            v["mps/mlx speedup (%)"] = (v["mps"] / v["mlx"] - 1) * 100
+            v[h] = (v["mps"] / v["mlx_gpu"] - 1) + 1
+
     if args.include_cpu and args.include_mlx:
-        headers.append("cpu/mlx speedup (%)")
+        h = "mlx_cpu/mlx_gpu speedup"
+        headers.append(h)
         for k, v in times.items():
-            v["cpu/mlx speedup (%)"] = (v["cpu"] / v["mlx"] - 1) * 100
+            v[h] = (v["mlx_cpu"] / v["mlx_gpu"] - 1) + 1
 
     max_name_length = max(len(name) for name in times.keys())
 
     # Formatting the header row
     header_row = (
-        "| Layer" + " " * (max_name_length - 5) + " | " + " | ".join(headers) + " |"
+        "| Operation" + " " * (max_name_length - 5) + " | " + " | ".join(headers) + " |"
     )
     header_line_parts = ["-" * (max_name_length + 6)] + [
         "-" * max(6, len(header)) for header in headers

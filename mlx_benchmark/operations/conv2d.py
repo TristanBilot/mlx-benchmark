@@ -9,7 +9,6 @@ import torch.nn as torch_nn
 import torch.nn.functional as F
 
 from base_benchmark import BaseBenchmark
-from utils import load_mnist
 
 
 class Conv2d(BaseBenchmark):
