@@ -1,4 +1,5 @@
 from config import USE_MLX
+
 if USE_MLX:
     import mlx.core as mx
     import mlx.nn as mx_nn
@@ -13,25 +14,29 @@ class BCE(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        dim = kwargs["dim"].split("x")
-        self.shape = [int(d) for d in dim]
+    def additional_preprocessing(self, framework):
+        if framework == "torch":
+            self.a_torch = torch.rand(*self.inputs[0].shape)
+            self.b_torch = torch.randint(
+                size=self.inputs[1].shape,
+                dtype=torch.float32,
+                low=0,
+                high=2,
+                device=self.device,
+            )
+        else:
+            self.b_mlx = mx.random.randint(shape=self.inputs[1].shape, low=0, high=2)
 
-    def setup(self, **kwargs):
-        data = torch.rand(self.shape)
+    def forward_mlx(self, **kwargs):
+        a, _ = self.inputs
+        b = self.b_mlx
 
-        return data.numpy(), data.numpy()
-
-    def forward_mlx(self, data, **kwargs):
-        y = mx.random.randint(shape=data.shape, low=0, high=2)
-
-        y = mx_nn.losses.binary_cross_entropy(data, y)
+        y = mx_nn.losses.binary_cross_entropy(a, b)
         mx.eval(y)
 
     @torch.no_grad()
-    def forward_torch(self, data, **kwargs):
-        y = torch.randint(
-            size=data.shape, dtype=torch.float32, low=0, high=2, device=self.device
-        )
+    def forward_torch(self, **kwargs):
+        a, b = self.a_torch, self.b_torch
 
-        y = F.binary_cross_entropy(data, y)
+        y = F.binary_cross_entropy(a, b)
         self.sync_mps_if_needed()

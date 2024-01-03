@@ -3,6 +3,7 @@ from time import time
 from typing import Tuple
 
 from config import USE_MLX
+
 if USE_MLX:
     import mlx.core as mx
 
@@ -20,15 +21,34 @@ class BaseBenchmark:
         self.y = []
         self.args_str = " ".join([f"{k[:3]}={v}" for k, v in kwargs.items()])
 
-    def setup(self, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Abstract method for setting up data before forward pass.
-        This is here that data is loaded and optionally preprocessed.
+        self.kwargs = kwargs
 
-        Returns 2 np.ndarray, the first is the input for the mlx forward
-        and the second is for the torch forward.
+    def compute_inputs(self, framework, device=None):
         """
-        raise NotImplementedError
+        Generates the default inputs for all benchmarks.
+        """
+        dims = []
+        for d in ["dim1", "dim2", "dim3"]:
+            if d in self.kwargs:
+                dim = self.kwargs[d].split("x")
+                dims.append([int(i) for i in dim])
+
+        if framework == "mlx":
+            self.inputs = [mx.random.normal(dim).astype(mx.float32) for dim in dims]
+        else:
+            self.inputs = [
+                torch.randn(dim, device=device, dtype=torch.float32) for dim in dims
+            ]
+
+        if "axis" in self.kwargs:
+            self.axis = self.kwargs["axis"]
+
+    def additional_preprocessing(self, framework=None):
+        """
+        Can be overridden if custom preprocessing has to be performed on the default
+        `self.inputs` given to operations.
+        """
+        pass
 
     def forward_mlx(self, **kwargs):
         """
@@ -52,15 +72,14 @@ class BaseBenchmark:
         Runs the benchmark for a specified number of iterations.
         Measures and records the duration of each forward pass.
         """
-        data_mlx, data_torch = self.setup(**kwargs)
+        self.compute_inputs(framework, device)
+        self.additional_preprocessing(framework)
 
         if framework == "mlx":
-            data = mx.array(data_mlx)
             forward_fn = self.forward_mlx
 
         elif framework == "torch":
             self.device = device
-            data = torch.tensor(data_torch, device=self.device)
             forward_fn = self.forward_torch
 
         else:
@@ -69,7 +88,7 @@ class BaseBenchmark:
         # Measures runtime for n iterations.
         mean_duration = np.mean(
             [
-                self._measure_runtime(forward_fn, data, **kwargs)
+                self._measure_runtime(forward_fn, **kwargs)
                 for _ in range(iterations + 1)
             ][1:]
         )
@@ -79,12 +98,12 @@ class BaseBenchmark:
         mean_duration_ms = np.round(mean_duration * 1000, 2)
         return mean_duration_ms
 
-    def _measure_runtime(self, fn, data, **kwargs) -> float:
+    def _measure_runtime(self, fn, **kwargs) -> float:
         """
         Simply runs the forward method and measures metrics.
         """
         tic = time()
-        fn(data, **kwargs)
+        fn(**kwargs)
 
         duration = time() - tic
 

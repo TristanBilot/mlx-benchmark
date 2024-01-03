@@ -1,8 +1,9 @@
 import multiprocessing as mp
+
 try:
-   mp.set_start_method('spawn', force=True)
+    mp.set_start_method("spawn", force=True)
 except RuntimeError:
-   pass
+    pass
 
 import gc
 from argparse import ArgumentParser
@@ -94,31 +95,32 @@ if __name__ == "__main__":
         assert torch.backends.mps.is_available(), "MPS backend not available."
 
     layers = [
-        Softmax(dim="64x1000000"),
-        Softmax(dim="1000000x64"),
-        Softmax(dim="64x16x32x1024"),
-        Softmax(dim="128x16x32x1024"),
-        # Softmax(dim="1024x16x32x128"),
-        # Softmax(dim="1024x64x32x8"),
-        # Linear(hid=32),
-        # Linear(hid=64),
-        # Linear(hid=128),
-        # Linear(hid=256),
-        # Conv2d(hid=32, channels=2),
-        # Conv2d(hid=32, channels=10),
-        # Conv2d(hid=32, channels=100),
-        # Conv2d(hid=64, channels=2),
-        # Conv2d(hid=64, channels=10),
-        # Conv2d(hid=64, channels=100),
-        # MatMul(dim="64x256"),
-        # MatMul(dim="1000x64x256"),
-        # MatMul(dim="1000x64x1024"),
-        # MatMul(dim="1000x1024x64"),
-        # MatMul(dim="10x100x64x1024"),
-        # BCE(dim="1000000"),
-        # BCE(dim="100000x32"),
-        # BCE(dim="100000x64x2"),
-        # BCE(dim="128x100000"),
+        MatMul(dim1="32x1x1000", dim2="32x1000x128"),
+        MatMul(dim1="1000x64x256", dim2="256x32"),
+        MatMul(dim1="1000x64x1024", dim2="1000x1024x32"),
+        MatMul(dim1="1000x1024x64", dim2="1000x64x256"),
+        MatMul(dim1="64x1000000", dim2="1000000x32"),
+        MatMul(dim1="1000000x64", dim2="64x1024"),
+        Softmax(dim1="64x1000000"),
+        Softmax(dim1="1000000x64"),
+        Softmax(dim1="64x16x32x1024"),
+        Softmax(dim1="128x16x32x1024"),
+        Softmax(dim1="1024x16x32x128"),
+        Softmax(dim1="1024x64x32x8"),
+        Linear(dim1="100x1024x32", dim2="32x1024", dim3="1024"),
+        Linear(dim1="100x1024x64", dim2="64x1024", dim3="1024"),
+        Linear(dim1="100x1024x256", dim2="256x1024", dim3="1024"),
+        Linear(dim1="100x1024x512", dim2="512x1024", dim3="1024"),
+        Linear(dim1="100x1x51200", dim2="51200x1", dim3="1"),
+        Conv2d(dim1="100x256x256x3", dim2="8x3x3x3"),
+        Conv2d(dim1="100x256x256x12", dim2="8x3x3x12"),
+        Conv2d(dim1="10x256x256x128", dim2="8x3x3x128"),
+        Conv2d(dim1="100x28x28x3", dim2="8x3x3x3"),
+        Conv2d(dim1="1000x28x28x3", dim2="8x3x3x3"),
+        BCE(dim1="1000000", dim2="1000000"),
+        BCE(dim1="100000x32", dim2="100000x32"),
+        BCE(dim1="100000x64x2", dim2="100000x64x2"),
+        BCE(dim1="128x100000", dim2="128x100000"),
     ]
 
     run_processes(layers, args)

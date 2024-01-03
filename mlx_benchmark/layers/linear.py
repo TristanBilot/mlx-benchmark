@@ -1,34 +1,35 @@
 from config import USE_MLX
+
 if USE_MLX:
     import mlx.core as mx
     import mlx.nn as mx_nn
 
 import torch
-import torch.nn as torch_nn
+import torch.nn.functional as F
 
 from base_benchmark import BaseBenchmark
-from utils import load_mnist
 
 
 class Linear(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.hid = kwargs["hid"]
 
-    def setup(self, **kwargs):
-        data = load_mnist().data / 255.0
-        data = data.numpy()
+    def additional_preprocessing(self, framework):
+        _, b, _ = self.inputs
 
-        return data, data
+        if framework == "torch":
+            self.b_torch = b.T
 
-    def forward_mlx(self, data, **kwargs):
-        in_dim = data.shape[-1]
-        layer = mx_nn.Linear(in_dim, self.hid)
-        mx.eval(layer(data))
+    def forward_mlx(self, **kwargs):
+        a, b, c = self.inputs
+
+        y = a @ b + c
+        mx.eval(y)
 
     @torch.no_grad()
-    def forward_torch(self, data, **kwargs):
-        in_dim = data.shape[-1]
-        layer = torch_nn.Linear(in_dim, self.hid).to(self.device)
-        layer(data)
+    def forward_torch(self, **kwargs):
+        a, _, c = self.inputs
+        b = self.b_torch
+
+        y = F.linear(a, b, c)
         self.sync_mps_if_needed()
