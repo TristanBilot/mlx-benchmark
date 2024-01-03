@@ -1,6 +1,4 @@
-import multiprocessing as mp
 from time import time
-from typing import Tuple
 
 from config import USE_MLX
 
@@ -65,7 +63,7 @@ class BaseBenchmark:
         """
         raise NotImplementedError
 
-    def run(self, framework, device=None, **kwargs) -> Tuple[float, float]:
+    def run(self, framework, device=None, **kwargs) -> float:
         """
         Runs the benchmark for a specified number of iterations.
         Measures and records the duration of each forward pass.
@@ -84,14 +82,12 @@ class BaseBenchmark:
             raise ValueError("Invalid framework.")
 
         # Measures runtime for n iterations.
-        mean_duration = np.mean(
-            [self._measure_runtime(forward_fn, **kwargs) for _ in range(2)][1:]
-        )
+        duration = [self._measure_runtime(forward_fn, **kwargs) for _ in range(2)][1:]
         # [1:] is used to remove the first measure, usually slower
         # due to cold start.
 
-        mean_duration_ms = np.round(mean_duration * 1000, 2)
-        return mean_duration_ms
+        duration_ms = duration * 1000
+        return duration_ms
 
     def _measure_runtime(self, fn, **kwargs) -> float:
         """

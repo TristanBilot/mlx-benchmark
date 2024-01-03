@@ -43,7 +43,6 @@ from config import USE_MLX
 
 if USE_MLX:
     import mlx.core as mx
-    import mlx.nn as mx_nn
 
 import torch
 
