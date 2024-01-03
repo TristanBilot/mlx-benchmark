@@ -65,9 +65,7 @@ class BaseBenchmark:
         """
         raise NotImplementedError
 
-    def run(
-        self, framework, device=None, iterations=10, **kwargs
-    ) -> Tuple[float, float]:
+    def run(self, framework, device=None, **kwargs) -> Tuple[float, float]:
         """
         Runs the benchmark for a specified number of iterations.
         Measures and records the duration of each forward pass.
@@ -87,10 +85,7 @@ class BaseBenchmark:
 
         # Measures runtime for n iterations.
         mean_duration = np.mean(
-            [
-                self._measure_runtime(forward_fn, **kwargs)
-                for _ in range(iterations + 1)
-            ][1:]
+            [self._measure_runtime(forward_fn, **kwargs) for _ in range(2)][1:]
         )
         # [1:] is used to remove the first measure, usually slower
         # due to cold start.

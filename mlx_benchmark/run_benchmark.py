@@ -10,6 +10,7 @@ from argparse import ArgumentParser
 from collections import defaultdict
 from distutils.util import strtobool
 
+import numpy as np
 import torch
 from tqdm import tqdm
 
@@ -23,7 +24,7 @@ from utils import print_benchmark
 from operations import *
 
 
-def run_processes(operations, args):
+def run_processes(operations, args, iterations=5):
     """
     Runs all operations in serial, on separate processes.
     Using processes avoids exploding memory within the main process during the bench.
@@ -31,18 +32,30 @@ def run_processes(operations, args):
     all_times = defaultdict(dict)
     queue = mp.Queue()
 
-    for op in tqdm(operations, total=len(operations)):
-        p = mp.Process(target=run, args=(op, args, queue))
-        p.start()
+    with tqdm(total=len(operations) * iterations) as pbar:
+        for op in operations:
+            op_times = defaultdict(list)
+            op_name = None
 
-        times = queue.get()
-        p.join()
+            for _ in range(iterations):
+                p = mp.Process(target=run, args=(op, args, queue))
+                p.start()
 
-        # NOTE: without this, memory still increases until the end of the bench.
-        del op
-        gc.collect()
+                times = queue.get()
+                p.join()
 
-        all_times.update(times)
+                for backend, time in list(times.values())[0].items():
+                    op_times[backend].append(time)
+                op_name = list(times.keys())[0]
+
+                pbar.update(1)
+
+            op_times_mean = {k: np.mean(v) for k, v in op_times.items()}
+            all_times[op_name] = op_times_mean
+
+            # NOTE: without this, memory still increases until the end of the bench.
+            del op
+            gc.collect()
 
     print("\nDetailed benchmark:")
     print_benchmark(all_times, args)
