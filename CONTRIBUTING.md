@@ -19,6 +19,76 @@ python run_benchmark.py --include_mps=False --include_mlx=False --include_cuda=T
 
 Once run, 2 tables will be printed. Copy-paste the detailed benchmark into [detailed_benchmark.md](benchmarks/detailed_benchmark.md) and do the same for the average benchmark into [average_benchmark.md](benchmarks/average_benchmark.md). You can then submit a pull request. To ensure consistency in the results, ensure that enough memory is available before running the benchmarks.
 
-## Add a new layer/operation
+## Add a new operation
 
-Many layers and basic operations are still missing in the benchmark. New examples can be easily added 
+Many layers and basic operations are still missing in the benchmark. New examples can be easily added to the benchmark, we take here the example of the `concat` operation.
+
+1. Append your benchmarks to the existing ones within `run_benchmark.py`.
+
+```python
+operations = [
+    ...
+    Concat(dim1="1000000x64", dim2="1000000x32", axis=1),
+    Concat(dim1="1000000x64", dim2="1000000x128", axis=1),
+    Concat(dim1="1000000x64", dim2="1000000x64", axis=0),
+    Concat(dim1="64x1000000", dim2="64x1000000", axis=0),
+]
+```
+The arguments starting with `dim*` will create an input tensor of the given shape. If multiple dims are given, like in the previous example, the input tensors for the benchmark can be accessed using `self.inputs[0]` and `self.inputs[1]`. All other arguments such as `axis` can be accessed using `self.kwargs["axis"]`.
+
+2. Create a new file and write the actual implementation of the operation, here in `operations/concat.py`.
+
+```python
+from config import USE_MLX
+
+if USE_MLX:
+    import mlx.core as mx
+    import mlx.nn as mx_nn
+
+import torch
+
+from base_benchmark import BaseBenchmark
+
+
+class Concat(BaseBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def forward_mlx(self, **kwargs):
+        a, b = self.inputs
+
+        y = mx.concatenate([a, b], axis=self.kwargs["axis"])
+        mx.eval(y)
+
+    @torch.no_grad()
+    def forward_torch(self, **kwargs):
+        a, b = self.inputs
+
+        y = torch.cat([a, b], dim=self.kwargs["axis"])
+        self.sync_mps_if_needed()
+```
+
+The structure is almost always the same for all operations. The method `forward_mlx` is the actual implementation of the mlx operation, and the same applies for `forward_torch`. For the mlx implementation, `mx.eval(.)` should be used to compute the operation, whereas `self.sync_mps_if_needed()` should be used after the torch operation.
+
+If the default inputs provided within the args are not enough to implement the new benchmark, you can add your own attributes by overriding this method:
+
+```python
+def additional_preprocessing(self, framework):
+    if framework == "mlx":
+        self.specific_input_for_mlx = ...
+
+def forward_mlx(self, **kwargs):
+    a = self.specific_input_for_mlx
+    ...
+```
+
+3. Lastly, append the new operation in `operations/__init__.py`:
+
+```python
+...
+from .concat import Concat
+```
+
+## New features
+
+Enhancements and new features are always welcome! Feel free to submit issues or pull requests.
