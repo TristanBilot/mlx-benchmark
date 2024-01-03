@@ -12,7 +12,7 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 
 **M1 Pro**
 
-| Layer                                           | cpu | mps | mlx | mps/mlx speedup (%) | cpu/mlx speedup (%) |
+| Operation                                           | cpu | mps | mlx | mps/mlx speedup (%) | cpu/mlx speedup (%) |
 |-----------------------------------------------------|------|------|------|-------------------|-------------------|
 | MatMul / dim=32x1x1000 dim=32x1000x128          |   0.80 |   0.46 |   0.35 |  31.43 | 128.57 |
 | MatMul / dim=1000x64x256 dim=256x32             |  25.91 |   3.02 |   0.68 | 344.12 | 3710.29 |
