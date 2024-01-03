@@ -136,6 +136,14 @@ if __name__ == "__main__":
         Concat(dim1="1000000x64", dim2="1000000x128", axis=1),
         Concat(dim1="1000000x64", dim2="1000000x64", axis=0),
         Concat(dim1="64x1000000", dim2="64x1000000", axis=0),
+        SumAll(dim1="64x128x128x128"),
+        SumAll(dim1="1000000"),
+        SumAll(dim1="1000000x128"),
+        SumAll(dim1="128x1000000"),
+        Sum(dim1="64x128x128x128", axis=0),
+        Sum(dim1="64x128x128x128", axis=1),
+        Sum(dim1="64x128x128x128", axis=2),
+        Sum(dim1="64x128x128x128", axis=3),
     ]
 
     run_processes(operations, args)
