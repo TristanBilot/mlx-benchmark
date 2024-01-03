@@ -14,6 +14,12 @@ simple_operations = {
     "sort": [mx.sort, torch.sort],
     "argmax": [mx.argmax, torch.argmax],
     "softmax": [mx.softmax, F.softmax],
+    "relu": [mx_nn.relu, F.relu],
+    "leaky_relu": [mx_nn.leaky_relu, F.leaky_relu],
+    "prelu": [mx_nn.prelu, F.prelu],
+    "softplus": [mx_nn.softplus, F.softplus],
+    "selu": [mx_nn.selu, F.selu],
+    "sigmoid": [mx.sigmoid, F.sigmoid],
 }
 
 
@@ -63,3 +69,33 @@ class Argmax(SimpleOperationBenchmark):
 class Softmax(SimpleOperationBenchmark):
     def __init__(self, **kwargs):
         super().__init__("softmax", **kwargs)
+
+
+class ReLU(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("relu", **kwargs)
+
+
+class LeakyReLU(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("leaky_relu", **kwargs)
+
+
+class PReLU(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("prelu", **kwargs)
+
+
+class Softplus(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("softplus", **kwargs)
+
+
+class SeLU(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("selu", **kwargs)
+
+
+class Sigmoid(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("sigmoid", **kwargs)

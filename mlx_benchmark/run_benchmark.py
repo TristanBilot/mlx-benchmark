@@ -164,6 +164,18 @@ if __name__ == "__main__":
         Sort(dim1="64x128x1024", axis=0),
         Sort(dim1="64x128x1024", axis=1),
         Sort(dim1="64x128x1024", axis=2),
+        ReLU(dim1="128x16x1024"),
+        ReLU(dim1="64x128x1024"),
+        PReLU(dim1="128x16x1024", dim2="1"),
+        PReLU(dim1="64x128x1024", dim2="1"),
+        LeakyReLU(dim1="128x16x1024"),
+        LeakyReLU(dim1="64x128x1024"),
+        Softplus(dim1="128x16x1024"),
+        Softplus(dim1="64x128x1024"),
+        SeLU(dim1="128x16x1024"),
+        SeLU(dim1="64x128x1024"),
+        Sigmoid(dim1="128x16x1024"),
+        Sigmoid(dim1="64x128x1024"),
     ]
 
     run_processes(operations, args)
