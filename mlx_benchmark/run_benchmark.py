@@ -125,12 +125,12 @@ if __name__ == "__main__":
         MatMul(dim1="1000x1024x64", dim2="1000x64x256"),
         MatMul(dim1="64x1000000", dim2="1000000x32"),
         MatMul(dim1="1000000x64", dim2="64x1024"),
-        Softmax(dim1="64x1000000"),
-        Softmax(dim1="1000000x64"),
-        Softmax(dim1="64x16x32x1024"),
-        Softmax(dim1="128x16x32x1024"),
-        Softmax(dim1="1024x16x32x128"),
-        Softmax(dim1="1024x64x32x8"),
+        Softmax(dim1="64x1000000", axis=-1),
+        Softmax(dim1="1000000x64", axis=-1),
+        Softmax(dim1="64x16x32x1024", axis=-1),
+        Softmax(dim1="128x16x32x1024", axis=-1),
+        Softmax(dim1="1024x16x32x128", axis=-1),
+        Softmax(dim1="1024x64x32x8", axis=-1),
         Linear(dim1="100x1024x32", dim2="32x1024", dim3="1024"),
         Linear(dim1="100x1024x64", dim2="64x1024", dim3="1024"),
         Linear(dim1="100x1024x256", dim2="256x1024", dim3="1024"),
@@ -161,6 +161,9 @@ if __name__ == "__main__":
         Argmax(dim1="64x1024x128", axis=1),
         Argmax(dim1="64x1024x128", axis=2),
         Argmax(dim1="64x128x1024", axis=2),
+        Sort(dim1="64x128x1024", axis=0),
+        Sort(dim1="64x128x1024", axis=1),
+        Sort(dim1="64x128x1024", axis=2),
     ]
 
     run_processes(operations, args)
