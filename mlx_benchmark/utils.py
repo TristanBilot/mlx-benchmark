@@ -46,13 +46,13 @@ def print_benchmark(times, args, reduce_mean=False):
         h = "mps/mlx_gpu speedup"
         headers.append(h)
         for k, v in times.items():
-            v[h] = (v["mps"] / v["mlx_gpu"] - 1) + 1
+            v[h] = v["mps"] / v["mlx_gpu"] - 1
 
     if args.include_cpu and args.include_mlx:
         h = "mlx_cpu/mlx_gpu speedup"
         headers.append(h)
         for k, v in times.items():
-            v[h] = (v["mlx_cpu"] / v["mlx_gpu"] - 1) + 1
+            v[h] = v["mlx_cpu"] / v["mlx_gpu"] - 1
 
     max_name_length = max(len(name) for name in times.keys())
 
