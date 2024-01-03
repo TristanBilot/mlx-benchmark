@@ -88,6 +88,8 @@ def forward_mlx(self, **kwargs):
 from .concat import Concat
 ```
 
+For simpler operations that only require the default input tensors given by the `dim` provided in args, you can implement the `SimpleOperationBenchmark` class in the same way as done in `simple_operations.py`.
+
 ## New features
 
 Enhancements and new features are always welcome! Feel free to submit issues or pull requests.
