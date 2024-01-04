@@ -6,14 +6,14 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 * `mlx_cpu`: mlx framework with cpu backend
 * `cpu`: torch framework with cpu backend
 * `mps`: torch framework with mps (gpu) backend
-* `mps/mlx_gpu speedup`: runtime speedup of mlx_gpu compared to mps
-* `mlx_cpu/mlx_gpu speedup`: runtime speedup of mlx_gpu compared to mlx_cpu
+* `mlx_gpu/mps speedup`: runtime speedup of mlx_gpu compared to mps
+* `mlx_gpu/mlx_cpu speedup`: runtime speedup of mlx_gpu compared to mlx_cpu
 
 ## Apple Silicon
 
 **M1 Pro**
 
-| Operation                                           | mlx_gpu | mlx_cpu | mps | cpu | mps/mlx_gpu speedup | mlx_cpu/mlx_gpu speedup |
+| Operation                                           | mlx_gpu | mlx_cpu | mps | cpu | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------------------------------------------|-------|-------|------|------|-------------------|-----------------------|
 | Argmax / dim=64x1024x128 axi=0                  |   1.77 |  26.02 |   2.36 |  23.67 |    +33% |  +1366% |
 | Argmax / dim=64x1024x128 axi=1                  |   1.46 |  10.94 |   2.54 |   5.42 |    +74% |   +650% |
