@@ -9,18 +9,38 @@ import torch.nn.functional as F
 
 from base_benchmark import BaseBenchmark
 
+if USE_MLX:
+    mlx_simple_operations = {
+        "sort": mx.sort,
+        "argmax": mx.argmax,
+        "softmax": mx.softmax,
+        "relu": mx_nn.relu,
+        "leaky_relu": mx_nn.leaky_relu,
+        "prelu": mx_nn.prelu,
+        "softplus": mx_nn.softplus,
+        "selu": mx_nn.selu,
+        "sigmoid": mx.sigmoid,
+        "sum": mx.sum,
+    }
 
-simple_operations = {
-    "sort": [mx.sort, torch.sort],
-    "argmax": [mx.argmax, torch.argmax],
-    "softmax": [mx.softmax, F.softmax],
-    "relu": [mx_nn.relu, F.relu],
-    "leaky_relu": [mx_nn.leaky_relu, F.leaky_relu],
-    "prelu": [mx_nn.prelu, F.prelu],
-    "softplus": [mx_nn.softplus, F.softplus],
-    "selu": [mx_nn.selu, F.selu],
-    "sigmoid": [mx.sigmoid, F.sigmoid],
+torch_simple_operations = {
+    "sort": torch.sort,
+    "argmax": torch.argmax,
+    "softmax": F.softmax,
+    "relu": F.relu,
+    "leaky_relu": F.leaky_relu,
+    "prelu": F.prelu,
+    "softplus": F.softplus,
+    "selu": F.selu,
+    "sigmoid": F.sigmoid,
+    "sum": torch.sum,
 }
+
+if USE_MLX:
+    assert torch_simple_operations.keys() == mlx_simple_operations.keys(), "torch and mlx operations are not the same."
+    simple_operations = {op: [mlx_simple_operations[op], torch_simple_operations[op]] for op in torch_simple_operations.keys()}
+else:
+    simple_operations = {op: [None, torch_simple_operations[op]] for op in torch_simple_operations.keys()}
 
 
 class SimpleOperationBenchmark(BaseBenchmark):
