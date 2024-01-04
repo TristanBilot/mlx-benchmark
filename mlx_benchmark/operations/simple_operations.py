@@ -119,3 +119,13 @@ class SeLU(SimpleOperationBenchmark):
 class Sigmoid(SimpleOperationBenchmark):
     def __init__(self, **kwargs):
         super().__init__("sigmoid", **kwargs)
+
+
+class Sum(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("sum", **kwargs)
+
+
+class SumAll(SimpleOperationBenchmark):
+    def __init__(self, **kwargs):
+        super().__init__("sum", **kwargs)
