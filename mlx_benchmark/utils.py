@@ -15,6 +15,11 @@ def load_mnist(path="data/mnist/"):
     return data
 
 
+def calculate_speedup(a, compared_to):
+    percentage_difference = -((a - compared_to) / a)
+    return percentage_difference * 100
+
+
 def print_benchmark(times, args, reduce_mean=False):
     times = dict(times)
 
@@ -46,13 +51,13 @@ def print_benchmark(times, args, reduce_mean=False):
         h = "mps/mlx_gpu speedup"
         headers.append(h)
         for k, v in times.items():
-            v[h] = (v["mps"] - v["mlx_gpu"]) / v["mps"]
+            v[h] = calculate_speedup(v["mlx_gpu"], compared_to=v["mps"])
 
     if args.include_cpu and args.include_mlx:
         h = "mlx_cpu/mlx_gpu speedup"
         headers.append(h)
         for k, v in times.items():
-            v[h] = (v["mlx_cpu"] - v["mlx_gpu"]) / v["mlx_cpu"]
+            v[h] = calculate_speedup(v["mlx_gpu"], compared_to=v["mlx_cpu"])
 
     max_name_length = max(len(name) for name in times.keys())
 
@@ -68,8 +73,17 @@ def print_benchmark(times, args, reduce_mean=False):
     print(header_row)
     print(header_line)
 
+    add_plus_symbol = (
+        lambda x, rounding: f"{'+' if x > 0 else ''}{int(x) if rounding == 0 else round(x, rounding)}"
+    )
+    format_value = (
+        lambda header: f"{add_plus_symbol(times[header], 0):>6}%"
+        if "speedup" in header
+        else f"{times[header]:>6.2f}"
+    )
+
     for op, times in times.items():
-        times_str = " | ".join(f"{times[header]:>6.2f}" for header in headers)
+        times_str = " | ".join(format_value(header) for header in headers)
 
         # Formatting each row
         print(f"| {op.ljust(max_name_length)} | {times_str} |")
