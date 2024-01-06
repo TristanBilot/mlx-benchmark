@@ -59,6 +59,12 @@ def print_benchmark(times, args, reduce_mean=False):
         for k, v in times.items():
             v[h] = calculate_speedup(v["mlx_gpu"], compared_to=v["mlx_cpu"])
 
+    if args.include_cpu and args.include_cuda:
+        h = "cuda/cpu speedup"
+        headers.append(h)
+        for k, v in times.items():
+            v[h] = calculate_speedup(v["cuda"], compared_to=v["cpu"])
+
     max_name_length = max(len(name) for name in times.keys())
 
     # Formatting the header row
