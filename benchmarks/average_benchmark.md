@@ -8,6 +8,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 * `mps`: torch framework with mps (gpu) backend
 * `mlx_gpu/mps speedup`: runtime speedup of mlx_gpu compared to mps
 * `mlx_gpu/mlx_cpu speedup`: runtime speedup of mlx_gpu compared to mlx_cpu
+* `cuda/cpu speedup`: runtime speedup of cuda compared to cpu
 
 ## Apple Silicon
 
@@ -123,3 +124,25 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sort       | 384.81 |   0.09 | +426581% |
 | Sum        |  66.76 |   0.05 | +142329% |
 | SumAll     |  29.81 |   0.05 | +63602% |
+
+**Tesla V100 32Go (PCIe) / Intel Xeon Gold 5120 14 cores / 28 threads @ 2.2GHz (Skylake), 60Go**
+
+| Operation      | cpu | cuda | cuda/cpu speedup |
+|----------------|------|------|----------------|
+| Argmax     |  28.51 |   0.05 | +54937% |
+| BCE        | 162.93 | 162.93 |     +0% |
+| Concat     | 153.20 |   0.05 | +296766% |
+| Conv1d     |  19.83 |   0.16 | +12492% |
+| Conv2d     |  31.96 |   0.10 | +31380% |
+| LeakyReLU  |   5.37 |   0.06 |  +8844% |
+| Linear     | 488.32 |   0.13 | +368993% |
+| MatMul     | 476.94 |   0.09 | +557853% |
+| PReLU      |   5.51 |   0.05 | +11436% |
+| ReLU       |   5.73 |   0.05 | +11151% |
+| SeLU       |   9.60 |   0.07 | +13760% |
+| Sigmoid    |   8.10 |   0.06 | +14465% |
+| Softmax    |  97.01 |   0.04 | +228312% |
+| Softplus   |  16.94 |   0.06 | +30331% |
+| Sort       | 439.61 |   0.12 | +363723% |
+| Sum        |  63.83 |   0.05 | +123983% |
+| SumAll     |  27.92 |   0.05 | +52778% |
