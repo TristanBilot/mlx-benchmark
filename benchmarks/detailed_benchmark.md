@@ -278,7 +278,7 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
-**Tesla V100 (NVLink) / Intel Xeon Gold 6148 20 cores, 40 threads @ 2.4 GHz (Skylake)**
+**Tesla V100 32Go (NVLink) / Intel Xeon Gold 6148 20 cores, 40 threads @ 2.4 GHz (Skylake), 60Go**
 
 | Operation                                           | cpu | cuda | cuda/cpu speedup |
 |-----------------------------------------------------|------|------|----------------|
