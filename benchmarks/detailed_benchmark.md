@@ -345,6 +345,72 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
+**RTX4090 (Laptop) / 13th Gen Intel Core i9-13950HX @ 2.20 GHz**
+
+| Operation                                           | cpu | cuda | cuda/cpu speedup |
+|-----------------------------------------------------|------|------|----------------|
+| Argmax / dim=64x1024x128 axi=0                  |  10.93 |   0.04 | +27318% |
+| Argmax / dim=64x1024x128 axi=1                  |   5.20 |   0.06 |  +9345% |
+| Argmax / dim=64x1024x128 axi=2                  |   3.78 |   0.04 |  +8423% |
+| Argmax / dim=64x128x1024 axi=2                  |   3.38 |   0.04 |  +7928% |
+| BCE / dim=1000000 dim=1000000                   |   6.30 |   1.91 |   +229% |
+| BCE / dim=100000x32 dim=100000x32               |   9.30 |   5.93 |    +56% |
+| BCE / dim=100000x64x2 dim=100000x64x2           |  25.23 |  25.60 |     -1% |
+| BCE / dim=128x100000 dim=128x100000             |  24.56 |  25.43 |     -3% |
+| Concat / dim=1000000x64 dim=1000000x32 axi=1    |  21.10 |   0.04 | +54929% |
+| Concat / dim=1000000x64 dim=1000000x128 axi=1   |  43.85 |   0.05 | +81574% |
+| Concat / dim=1000000x64 dim=1000000x64 axi=0    |  24.15 |   0.06 | +42753% |
+| Concat / dim=64x1000000 dim=64x1000000 axi=0    |  25.45 |   0.04 | +61673% |
+| Conv1d / dim=100x256x3 dim=8x3x3                |   5.39 |   0.18 |  +2864% |
+| Conv1d / dim=100x256x256 dim=8x3x256            |  24.19 |   0.20 | +11980% |
+| Conv1d / dim=16x1000x80 dim=128x11x80           |  96.52 |   0.20 | +49210% |
+| Conv1d / dim=16x1000x3 dim=128x11x3             |  22.58 |   0.17 | +13580% |
+| Conv2d / dim=100x256x256x3 dim=8x3x3x3          |  47.10 |   0.07 | +65885% |
+| Conv2d / dim=10x256x256x12 dim=8x3x3x12         |  16.89 |   0.11 | +15726% |
+| Conv2d / dim=1x256x256x128 dim=8x3x3x128        |  17.61 |   0.10 | +16845% |
+| Conv2d / dim=100x28x28x3 dim=8x3x3x3            |   2.57 |   0.07 |  +3532% |
+| Conv2d / dim=1000x28x28x3 dim=8x3x3x3           |   4.47 |   0.08 |  +5756% |
+| LeakyReLU / dim=128x16x1024                     |   5.28 |   0.05 | +11341% |
+| LeakyReLU / dim=64x128x1024                     |   5.92 |   0.03 | +17641% |
+| Linear / dim=100x1024x32 dim=32x1024 dim=1024   |  28.30 |   0.06 | +43642% |
+| Linear / dim=100x1024x64 dim=64x1024 dim=1024   |  29.67 |   0.05 | +58430% |
+| Linear / dim=100x1024x256 dim=256x1024 dim=1024 |  77.41 |   0.06 | +133963% |
+| Linear / dim=100x1024x512 dim=512x1024 dim=1024 | 145.80 |   0.05 | +312542% |
+| Linear / dim=100x1x51200 dim=51200x1 dim=1      |   0.76 |   0.09 |   +729% |
+| MatMul / dim=32x1x1000 dim=32x1000x128          |   4.30 |   0.06 |  +6549% |
+| MatMul / dim=1000x64x256 dim=256x32             |   6.54 |   0.04 | +15985% |
+| MatMul / dim=1000x64x1024 dim=1000x1024x32      |   9.69 |   0.05 | +18895% |
+| MatMul / dim=1000x1024x64 dim=1000x64x256       |  59.26 |   0.05 | +126324% |
+| MatMul / dim=64x1000000 dim=1000000x32          |   9.54 |   0.06 | +15754% |
+| MatMul / dim=1000000x64 dim=64x1024             | 190.66 |   0.05 | +408328% |
+| PReLU / dim=128x16x1024 dim=1                   |   2.43 |   0.05 |  +4374% |
+| PReLU / dim=64x128x1024 dim=1                   |   6.83 |   0.06 | +12180% |
+| ReLU / dim=128x16x1024                          |   6.24 |   0.04 | +15103% |
+| ReLU / dim=64x128x1024                          |   5.71 |   0.06 | +10117% |
+| SeLU / dim=128x16x1024                          |   5.53 |   0.04 | +13877% |
+| SeLU / dim=64x128x1024                          |   6.87 |   0.05 | +14994% |
+| Sigmoid / dim=128x16x1024                       |   7.78 |   0.03 | +23709% |
+| Sigmoid / dim=64x128x1024                       |   6.79 |   0.04 | +17177% |
+| Softmax / dim=64x1000000 axi=-1                 |  27.15 |   0.04 | +72247% |
+| Softmax / dim=1000000x64 axi=-1                 |  21.48 |   0.03 | +66531% |
+| Softmax / dim=64x16x32x1024 axi=-1              |  10.00 |   0.04 | +26336% |
+| Softmax / dim=128x16x32x1024 axi=-1             |  17.49 |   0.04 | +43626% |
+| Softmax / dim=1024x16x32x128 axi=-1             |  17.69 |   0.04 | +48277% |
+| Softmax / dim=1024x64x32x8 axi=-1               |   7.37 |   0.04 | +17921% |
+| Softplus / dim=128x16x1024                      |   4.11 |   0.04 | +11465% |
+| Softplus / dim=64x128x1024                      |   8.91 |   0.04 | +24884% |
+| Sort / dim=64x128x1024 axi=0                    |  58.25 |   0.10 | +57252% |
+| Sort / dim=64x128x1024 axi=1                    |  35.33 |   0.10 | +33582% |
+| Sort / dim=64x128x1024 axi=2                    |  27.16 |   0.11 | +23660% |
+| Sum / dim=64x128x128x128 axi=0                  |  12.80 |   0.04 | +34949% |
+| Sum / dim=64x128x128x128 axi=1                  |  10.08 |   0.04 | +24977% |
+| Sum / dim=64x128x128x128 axi=2                  |  10.43 |   0.04 | +24102% |
+| Sum / dim=64x128x128x128 axi=3                  |  12.06 |   0.04 | +27511% |
+| SumAll / dim=64x128x128x128                     |   9.72 |   0.04 | +23807% |
+| SumAll / dim=1000000                            |   2.39 |   0.04 |  +5619% |
+| SumAll / dim=1000000x128                        |  10.13 |   0.05 | +21906% |
+| SumAll / dim=128x1000000                        |   9.54 |   0.04 | +23309% |
+
 **Tesla V100 32Go (NVLink) / Intel Xeon Gold 6148 20 cores, 40 threads @ 2.4 GHz (Skylake), 60Go**
 
 | Operation                                           | cpu | cuda | cuda/cpu speedup |
