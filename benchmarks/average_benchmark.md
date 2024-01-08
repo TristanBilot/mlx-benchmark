@@ -191,6 +191,28 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
+**RTX4090 16GB (Laptop) / 13th Gen Intel Core i9-13950HX @ 2.20 GHz 64GB**
+
+| Operation      | cpu | cuda | cuda/cpu speedup |
+|----------------|------|------|----------------|
+| Argmax     |   5.82 |   0.05 | +12742% |
+| BCE        |  16.35 |  14.72 |    +11% |
+| Concat     |  28.64 |   0.05 | +60321% |
+| Conv1d     |  37.17 |   0.19 | +19915% |
+| Conv2d     |  17.73 |   0.09 | +20559% |
+| LeakyReLU  |   5.60 |   0.04 | +13985% |
+| Linear     |  56.39 |   0.06 | +90380% |
+| MatMul     |  46.67 |   0.05 | +90196% |
+| PReLU      |   4.63 |   0.05 |  +8324% |
+| ReLU       |   5.97 |   0.05 | +12230% |
+| SeLU       |   6.20 |   0.04 | +14474% |
+| Sigmoid    |   7.28 |   0.04 | +20142% |
+| Softmax    |  16.86 |   0.04 | +44857% |
+| Softplus   |   6.51 |   0.04 | +18188% |
+| Sort       |  40.25 |   0.11 | +37541% |
+| Sum        |  11.34 |   0.04 | +27651% |
+| SumAll     |   7.95 |   0.04 | +18684% |
+
 **Tesla V100 32Go (NVLink) / Intel Xeon Gold 6148 20 cores, 40 threads @ 2.4 GHz (Skylake), 60Go**
 
 | Operation      | cpu | cuda | cuda/cpu speedup |
