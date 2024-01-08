@@ -125,7 +125,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
-**RTX4090 (Laptop) / 13th Gen Intel Core i9-13950HX @ 2.20 GHz**
+**RTX4090 16GB (Laptop) / 13th Gen Intel Core i9-13950HX @ 2.20 GHz 64GB**
 
 | Operation      | cpu | cuda | cuda/cpu speedup |
 |----------------|------|------|----------------|
