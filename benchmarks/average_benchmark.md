@@ -256,3 +256,26 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sort       | 439.61 |   0.12 | +363723% |
 | Sum        |  63.83 |   0.05 | +123983% |
 | SumAll     |  27.92 |   0.05 | +52778% |
+
+
+**NVIDIA A100 80GB (PCIe) / Intel Xeon Platinum 8358 CPU (32 cores / 64 threads)@ 2.60GHz, 512GB RAM**
+
+| Operation      | cpu | cuda | cuda/cpu speedup |
+|----------------|------|------|----------------|
+| Argmax     |  26.50 |   0.05 | +58765% |
+| BCE        | 149.90 | 149.66 |     +0% |
+| Concat     | 142.74 |   0.04 | +357746% |
+| Conv1d     |  14.09 |   0.16 |  +8870% |
+| Conv2d     |  28.82 |   0.12 | +23553% |
+| LeakyReLU  |   5.17 |   0.04 | +12059% |
+| Linear     | 272.15 |   0.08 | +344715% |
+| MatMul     | 301.72 |   0.06 | +494939% |
+| PReLU      |   5.15 |   0.06 |  +8972% |
+| ReLU       |   4.97 |   0.04 | +11760% |
+| SeLU       |   8.01 |   0.04 | +20165% |
+| Sigmoid    |   6.86 |   0.04 | +17952% |
+| Softmax    |  94.58 |   0.04 | +243431% |
+| Softplus   |  17.48 |   0.04 | +46946% |
+| Sort       | 489.44 |   0.09 | +544331% |
+| Sum        |  64.16 |   0.05 | +138715% |
+| SumAll     |  25.47 |   0.05 | +54623% |
