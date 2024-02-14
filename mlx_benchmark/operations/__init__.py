@@ -16,3 +16,4 @@ from .simple_operations import (
     Sum,
     SumAll,
 )
+from .gather_scatter import Gather, Scatter, ScatterSum, ScatterMax

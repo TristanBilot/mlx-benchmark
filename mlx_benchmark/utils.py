@@ -1,5 +1,8 @@
+import math
 from collections import defaultdict
 
+import mlx.core as mx
+import torch
 import numpy as np
 import torchvision
 import torchvision.transforms as transforms
@@ -89,7 +92,7 @@ def print_benchmark(times, args, reduce_mean=False):
     print(header_line)
 
     add_plus_symbol = (
-        lambda x, rounding: f"{'+' if x > 0 else ''}{int(x) if rounding == 0 else round(x, rounding)}"
+        lambda x, rounding: f"{'+' if x > 0 else ''}{(int(x) if not math.isnan(x) else x) if rounding == 0 else round(x, rounding)}"
     )
     format_value = (
         lambda header: f"{add_plus_symbol(times[header], 0):>6}%"
@@ -102,3 +105,11 @@ def print_benchmark(times, args, reduce_mean=False):
 
         # Formatting each row
         print(f"| {op.ljust(max_name_length)} | {times_str} |")
+
+
+def get_dummy_edge_index(shape, num_nodes, device, framework):
+    if framework == "mlx":
+        return mx.random.randint(0, num_nodes - 1, shape)
+    elif framework == "torch":
+        return torch.randint(0, num_nodes - 1, shape).to(device)
+    raise ValueError("Framework should be either mlx or torch.")
