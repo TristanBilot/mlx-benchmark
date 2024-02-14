@@ -1,4 +1,4 @@
-from time import time
+import time
 from typing import Callable
 
 from config import USE_MLX
@@ -101,10 +101,13 @@ class BaseBenchmark:
         """
         Simply runs the forward method and measures metrics.
         """
-        tic = time()
-        fn(**kwargs)
+        tic = time.perf_counter()
+        try:
+            fn(**kwargs)
+        except NotImplementedError:
+            return float("nan")
 
-        duration = time() - tic
+        duration = time.perf_counter() - tic
 
         return duration
 
