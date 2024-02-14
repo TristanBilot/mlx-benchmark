@@ -5,7 +5,7 @@ This repo aims to benchmark Apple's MLX operations and layers, on all Apple Sili
 
 Current devices: `M1`, `M1 Pro`, `M2`, `M2 Pro`, `M2 Max`, `M2 Ultra`, `M3 Pro`, `M3 Max`.
 
-Missing devices: `M1 Max`, `M1 Ultra`, `M3`, `M3 Ultra`, and `other CUDA GPUs`.
+Missing devices: `M1 Max`, `M1 Ultra`, `M3`, and `other CUDA GPUs`.
 
 ## Benchmarks
 
