@@ -64,7 +64,7 @@ class _Scatter(BaseBenchmark):
             else torch.zeros_like(node_features)
         )
 
-        if framework == "torch":
+        if self.scatter_op != "indexing" and framework == "torch":
             self.index = self.index.unsqueeze(1)
 
         def fn_indexing(x, y, z):
