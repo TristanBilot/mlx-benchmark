@@ -1,11 +1,16 @@
-# mlx-benchmark
+# ⚡️ mlx-benchmark ⚡️
+### A comprehensive benchmark of MLX ops.
+
 This repo aims to benchmark Apple's MLX operations and layers, on all Apple Silicon chips, along with some GPUs.
 
-**Contribute:** If you have a device not yet featured in the benchmark, especially the ones listed below, your PR is welcome to broaden the scope and accuracy of this project.
+**Contributions:** Everyone can contribute to the benchmark! If you have a missing device or if you want to add a missing layer/operation, please read the [contribution guidelines](CONTRIBUTING.md).
 
-Current devices: `M1`, `M1 Pro`, `M2`, `M2 Pro`, `M2 Max`, `M2 Ultra`, `M3`, `M3 Pro`, `M3 Max`.
+Current devices: `M1`, `M1 Pro`, `M2`, `M2 Pro`, `M2 Max`, `M2 Ultra`, `M3 Pro`, `M3 Max`.
 
-Missing devices: `M1 Max`, `M1 Ultra`, and `other CUDA GPUs`.
+Missing devices: `M1 Max`, `M1 Ultra`, `M3`, and `other CUDA GPUs`.
+
+> [!NOTE]
+> You can submit your benchmark even for a device that is already listed, provided you use a newer version of MLX. Simply submit a PR by overriding the old benchmark table. Also, most of the existing benchmarks do not include the `mx.compile` feature, which has been recently added to mlx-benchmark.
 
 ## Benchmarks
 
@@ -59,4 +64,4 @@ python run_benchmark.py --include_mps=False --include_mlx=False --include_cuda=T
 
 ## Contributing
 
-Everyone can contribute to the benchmark! If you have a missing device or if you want to add a missing layer/operation, please read the [contribution guidelines](CONTRIBUTING.md).
+If you have a device not yet featured in the benchmark, especially the ones listed below, your PR is welcome to broaden the scope and accuracy of this project.
