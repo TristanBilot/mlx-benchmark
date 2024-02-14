@@ -76,10 +76,16 @@ def run(op, args, queue=None):
         mlx_time = op.run(framework="mlx")
         times[op_name]["mlx_gpu"] = mlx_time
 
+        # Compiled GPU kernels
+        if args.compile:
+            mlx_time = op.run(framework="mlx", compile=True)
+            times[op_name]["mlx_gpu_compile"] = mlx_time
+
         # CPU
-        mx.set_default_device(mx.cpu)
-        mlx_time = op.run(framework="mlx")
-        times[op_name]["mlx_cpu"] = mlx_time
+        if args.include_cpu:
+            mx.set_default_device(mx.cpu)
+            mlx_time = op.run(framework="mlx")
+            times[op_name]["mlx_cpu"] = mlx_time
 
     # CPU PyTorch benchmarks.
     if args.include_cpu:
@@ -107,6 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--include_mps", type=strtobool, default="True")
     parser.add_argument("--include_mlx", type=strtobool, default="True")
     parser.add_argument("--include_cuda", type=strtobool, default="False")
+    parser.add_argument("--compile", type=strtobool, default="True")
     args = parser.parse_args()
     print(args)
     print(f"Use MLX: {USE_MLX}")

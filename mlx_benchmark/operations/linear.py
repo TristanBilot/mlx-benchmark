@@ -19,10 +19,13 @@ class Linear(BaseBenchmark):
         if framework == "torch":
             self.b_torch = b.T
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         a, b, c = self.inputs
 
-        y = a @ b + c
+        fn = lambda x, y, z: x @ y + z
+        fn = self.compile_if_needed(fn, compile=compile)
+
+        y = fn(a, b, c)
         mx.eval(y)
 
     @torch.no_grad()

@@ -1,4 +1,5 @@
 from time import time
+from typing import Callable
 
 from config import USE_MLX
 
@@ -20,6 +21,7 @@ class BaseBenchmark:
         self.args_str = " ".join([f"{k[:3]}={v}" for k, v in kwargs.items()])
 
         self.kwargs = kwargs
+        self.compiled_fn: Callable = None
 
     def compute_inputs(self, framework, device=None):
         """
@@ -63,7 +65,7 @@ class BaseBenchmark:
         """
         raise NotImplementedError
 
-    def run(self, framework, device=None, **kwargs) -> float:
+    def run(self, framework, compile=False, device=None, **kwargs) -> float:
         """
         Runs the benchmark for a specified number of iterations.
         Measures and records the duration of each forward pass.
@@ -73,6 +75,10 @@ class BaseBenchmark:
 
         if framework == "mlx":
             forward_fn = self.forward_mlx
+            kwargs = {
+                **kwargs,
+                "compile": compile,
+            }
 
         elif framework == "torch":
             self.device = device
@@ -107,3 +113,14 @@ class BaseBenchmark:
         """
         if self.device == torch.device("mps"):
             torch.mps.synchronize()
+
+    def compile_if_needed(self, fn, **kwargs):
+        """
+        Caches the compiled function `fun` when called for the first time.
+        """
+        if "compile" in kwargs and kwargs["compile"]:
+            if self.compiled_fn is not None:
+                return self.compiled_fn
+            self.compiled_fn = mx.compile(fn)
+            return self.compiled_fn
+        return fn

@@ -39,13 +39,22 @@ def print_benchmark(times, args, reduce_mean=False):
     headers = []
     if args.include_mlx:
         headers.append("mlx_gpu")
-        headers.append("mlx_cpu")
+        if args.compile:
+            headers.append("mlx_gpu_compile")
+        if args.include_cpu:
+            headers.append("mlx_cpu")
     if args.include_mps:
         headers.append("mps")
     if args.include_cpu:
         headers.append("cpu")
     if args.include_cuda:
         headers.append("cuda")
+
+    if args.compile and args.include_mlx:
+        h = "mlx_gpu_compile/mlx_gpu speedup"
+        headers.append(h)
+        for k, v in times.items():
+            v[h] = calculate_speedup(v["mlx_gpu_compile"], compared_to=v["mlx_gpu"])
 
     if args.include_mps and args.include_mlx:
         h = "mlx_gpu/mps speedup"

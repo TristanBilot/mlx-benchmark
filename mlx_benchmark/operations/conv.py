@@ -21,10 +21,11 @@ class Conv1d(BaseBenchmark):
             self.a_torch = torch.transpose(a, -1, -2)
             self.b_torch = torch.transpose(b, -1, -2)
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         a, b = self.inputs
 
-        y = mx.conv1d(a, b)
+        fn = self.compile_if_needed(mx.conv1d, compile=compile)
+        y = fn(a, b)
         mx.eval(y)
 
     @torch.no_grad()
@@ -46,10 +47,11 @@ class Conv2d(BaseBenchmark):
             self.a_torch = torch.permute(a, (0, 3, 1, 2))
             self.b_torch = torch.permute(b, (0, 3, 1, 2))
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         a, b = self.inputs
 
-        y = mx.conv2d(a, b)
+        fn = self.compile_if_needed(mx.conv2d, compile=compile)
+        y = fn(a, b)
         mx.eval(y)
 
     @torch.no_grad()

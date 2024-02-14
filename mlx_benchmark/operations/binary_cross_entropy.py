@@ -27,11 +27,12 @@ class BCE(BaseBenchmark):
         else:
             self.b_mlx = mx.random.randint(shape=self.inputs[1].shape, low=0, high=2)
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         a, _ = self.inputs
         b = self.b_mlx
 
-        y = mx_nn.losses.binary_cross_entropy(a, b)
+        fn = self.compile_if_needed(mx_nn.losses.binary_cross_entropy, compile=compile)
+        y = fn(a, b)
         mx.eval(y)
 
     @torch.no_grad()

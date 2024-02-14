@@ -12,10 +12,13 @@ class MatMul(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         a, b = self.inputs
 
-        y = a @ b
+        fn = lambda x, y: x @ y
+        fn = self.compile_if_needed(fn, compile=compile)
+
+        y = fn(a, b)
         mx.eval(y)
 
     @torch.no_grad()

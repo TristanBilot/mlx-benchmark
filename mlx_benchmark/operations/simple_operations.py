@@ -37,10 +37,17 @@ torch_simple_operations = {
 }
 
 if USE_MLX:
-    assert torch_simple_operations.keys() == mlx_simple_operations.keys(), "torch and mlx operations are not the same."
-    simple_operations = {op: [mlx_simple_operations[op], torch_simple_operations[op]] for op in torch_simple_operations.keys()}
+    assert (
+        torch_simple_operations.keys() == mlx_simple_operations.keys()
+    ), "torch and mlx operations are not the same."
+    simple_operations = {
+        op: [mlx_simple_operations[op], torch_simple_operations[op]]
+        for op in torch_simple_operations.keys()
+    }
 else:
-    simple_operations = {op: [None, torch_simple_operations[op]] for op in torch_simple_operations.keys()}
+    simple_operations = {
+        op: [None, torch_simple_operations[op]] for op in torch_simple_operations.keys()
+    }
 
 
 class SimpleOperationBenchmark(BaseBenchmark):
@@ -54,14 +61,14 @@ class SimpleOperationBenchmark(BaseBenchmark):
 
         self.basic_operation = basic_operation
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         fn = simple_operations[self.basic_operation][0]
 
-        kwargs = {}
         if "axis" in self.kwargs:
             kwargs["axis"] = self.kwargs["axis"]
 
-        y = fn(*self.inputs, **kwargs)
+        fn = self.compile_if_needed(fn, compile=compile)
+        y = fn(*self.inputs)
         mx.eval(y)
 
     @torch.no_grad()

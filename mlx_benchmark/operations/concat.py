@@ -12,10 +12,11 @@ class Concat(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def forward_mlx(self, **kwargs):
+    def forward_mlx(self, compile=False, **kwargs):
         a, b = self.inputs
 
-        y = mx.concatenate([a, b], axis=self.kwargs["axis"])
+        fn = self.compile_if_needed(mx.concatenate, compile=compile)
+        y = fn([a, b], self.kwargs["axis"])
         mx.eval(y)
 
     @torch.no_grad()
