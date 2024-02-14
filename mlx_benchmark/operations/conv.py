@@ -39,7 +39,7 @@ class Conv2d(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def additional_preprocessing(self, framework):
+    def additional_preprocessing(self, framework, device):
         a, b = self.inputs
 
         if framework == "torch":
