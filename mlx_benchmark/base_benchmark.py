@@ -41,7 +41,7 @@ class BaseBenchmark:
         if "axis" in self.kwargs:
             self.axis = self.kwargs["axis"]
 
-    def additional_preprocessing(self, framework=None):
+    def additional_preprocessing(self, framework=None, device=None):
         """
         Can be overridden if custom preprocessing has to be performed on the default
         `self.inputs` given to operations.
@@ -69,7 +69,7 @@ class BaseBenchmark:
         Measures and records the duration of each forward pass.
         """
         self.compute_inputs(framework, device)
-        self.additional_preprocessing(framework)
+        self.additional_preprocessing(framework, device)
 
         if framework == "mlx":
             forward_fn = self.forward_mlx

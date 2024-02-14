@@ -13,7 +13,7 @@ class Linear(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def additional_preprocessing(self, framework):
+    def additional_preprocessing(self, framework, device):
         _, b, _ = self.inputs
 
         if framework == "torch":

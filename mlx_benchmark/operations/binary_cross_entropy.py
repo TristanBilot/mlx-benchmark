@@ -14,15 +14,15 @@ class BCE(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def additional_preprocessing(self, framework):
+    def additional_preprocessing(self, framework, device):
         if framework == "torch":
-            self.a_torch = torch.rand(*self.inputs[0].shape)
+            self.a_torch = torch.rand(*self.inputs[0].shape).to(device)
             self.b_torch = torch.randint(
                 size=self.inputs[1].shape,
                 dtype=torch.float32,
                 low=0,
                 high=2,
-                device=self.device,
+                device=device,
             )
         else:
             self.b_mlx = mx.random.randint(shape=self.inputs[1].shape, low=0, high=2)

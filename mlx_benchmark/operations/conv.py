@@ -13,7 +13,7 @@ class Conv1d(BaseBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def additional_preprocessing(self, framework):
+    def additional_preprocessing(self, framework, device):
         a, b = self.inputs
 
         # In torch, the channels are located at axis 1
