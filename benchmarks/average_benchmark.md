@@ -60,7 +60,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum         |   3.48 |   3.47 |  10.92 |   6.37 |  10.60 |     +0% |    +82% |   +213% |
 | SumAll      |   2.66 |   2.62 |   7.79 |   2.75 |   3.74 |     +1% |     +3% |   +192% |
 
-**M1 Max 64GB**
+**M1 Max 64GB** mlx 0.2.0
 
 | Operation       | mlx_gpu | mlx_gpu_compile | mlx_cpu | mps | cpu | mlx_gpu_compile/mlx_gpu speedup | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------|-------|---------------|-------|------|------|-------------------------------|-------------------|-----------------------|
