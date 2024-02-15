@@ -19,6 +19,14 @@ python run_benchmark.py --include_mps=False --include_mlx=False --include_cuda=T
 
 Once run, 2 tables will be printed. Copy-paste the detailed benchmark into [detailed_benchmark.md](benchmarks/detailed_benchmark.md) and do the same for the average benchmark into [average_benchmark.md](benchmarks/average_benchmark.md). You can then submit a pull request. To ensure consistency in the results, ensure that enough memory is available before running the benchmarks.
 
+Before submitting your PR, ensure to add the config of your M ship along with the version of MLX you're using. This can be easily done by running:
+
+```python
+python mlx_benchmark/get_cpu_gpu_config.py
+
+>>> (Apple M1 Pro: 2E+8P+16GPU+16GB) - mlx: 0.2.0
+```
+
 ## Add a new operation
 
 Many layers and basic operations are still missing in the benchmark. New examples can be easily added to the benchmark, we take here the example of the `concat` operation.
