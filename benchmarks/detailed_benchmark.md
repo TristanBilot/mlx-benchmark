@@ -545,7 +545,7 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 | SumAll / dim=1000000x128                        |   0.89 |   0.86 |   8.60 |   1.32 |   2.50 |     +3% |    +48% |   +869% |
 | SumAll / dim=128x1000000                        |   0.89 |   0.87 |   8.58 |   1.20 |   2.59 |     +2% |    +35% |   +865% |
 
-**M3 (RAM: 16GB)**
+**M3 (RAM: 16GB)**  - mlx 0.2.0
 
 | Operation                                           | mlx_gpu | mlx_cpu | mps | cpu | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------------------------------------------|-------|-------|------|------|-------------------|-----------------------|

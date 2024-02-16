@@ -178,7 +178,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum        |   0.92 |   0.90 |   9.04 |   1.39 |   6.18 |     +1% |    +51% |   +883% |
 | SumAll     |   0.75 |   0.76 |   6.56 |   1.02 |   1.99 |      0% |    +35% |   +770% |
 
-**M3 (RAM: 16GB)**
+**M3 (RAM: 16GB)** - mlx 0.2.0
 
  Average benchmark:
 | Operation      | mlx_gpu | mlx_cpu | mps | cpu | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
