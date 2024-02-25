@@ -80,7 +80,7 @@ class SimpleOperationBenchmark(BaseBenchmark):
             kwargs["dim"] = self.kwargs["axis"]
 
         y = fn(*self.inputs, **kwargs)
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()
 
 
 class Sort(SimpleOperationBenchmark):

@@ -26,4 +26,4 @@ class MatMul(BaseBenchmark):
         a, b = self.inputs
 
         y = a @ b
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()
