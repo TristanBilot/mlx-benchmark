@@ -1,7 +1,6 @@
 import math
 from collections import defaultdict
 
-import mlx.core as mx
 import torch
 import numpy as np
 import torchvision
@@ -109,6 +108,8 @@ def print_benchmark(times, args, reduce_mean=False):
 
 def get_dummy_edge_index(shape, num_nodes, device, framework):
     if framework == "mlx":
+        import mlx.core as mx
+        
         return mx.random.randint(0, num_nodes - 1, shape)
     elif framework == "torch":
         return torch.randint(0, num_nodes - 1, shape).to(device)
