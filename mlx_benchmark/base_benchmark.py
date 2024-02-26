@@ -110,13 +110,15 @@ class BaseBenchmark:
         duration = time.perf_counter() - tic
 
         return duration
-
-    def sync_mps_if_needed(self):
+    
+    def sync_torch_gpu_if_needed(self):
         """
         Call this function after every torch implementation to ensure
-        the mps execution has finished.
+        the mps or cuda execution has finished.
         """
-        if self.device == torch.device("mps"):
+        if self.device.type == "cuda": # self.device == torch.device("cuda") fails if a particular gpu is selected
+            torch.cuda.synchronize()
+        elif self.device.type == "mps":
             torch.mps.synchronize()
 
     def compile_if_needed(self, fn, **kwargs):

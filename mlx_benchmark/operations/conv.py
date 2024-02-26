@@ -33,7 +33,7 @@ class Conv1d(BaseBenchmark):
         a, b = self.a_torch, self.b_torch
 
         y = F.conv1d(a, b)
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()
 
 
 class Conv2d(BaseBenchmark):
@@ -59,4 +59,4 @@ class Conv2d(BaseBenchmark):
         a, b = self.a_torch, self.b_torch
 
         y = F.conv2d(a, b)
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()

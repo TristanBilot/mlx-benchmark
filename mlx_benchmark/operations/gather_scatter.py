@@ -39,7 +39,7 @@ class Gather(BaseBenchmark):
         a, b = self.node_features, self.index
 
         y = a[b]
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()
 
 
 class _Scatter(BaseBenchmark):
@@ -118,7 +118,7 @@ class _Scatter(BaseBenchmark):
         a, b, c = self.src, self.index, self.node_features
 
         y = self._scatter_fn_torch(a, b, c)
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()
 
 
 class Scatter(_Scatter):

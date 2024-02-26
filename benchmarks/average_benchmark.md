@@ -252,6 +252,34 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
+**RTX4090 (Desktop) / 10th Gen Intel Core i9-10940X @ 3.30GHz 128GB**
+
+| Operation       | cpu | cuda | cuda/cpu speedup |
+|-----------------|------|------|----------------|
+| Argmax      |   6.67 |   0.04 | +14782% |
+| BCE         |  23.74 |   0.14 | +16992% |
+| Concat      |  52.08 |   1.29 |  +3922% |
+| Conv1d      |   2.84 |   0.15 |  +1753% |
+| Conv2d      |   6.60 |   0.25 |  +2559% |
+| Gather      |  19.75 |   0.27 |  +7340% |
+| LeakyReLU   |   2.44 |   0.03 |  +7439% |
+| Linear      |  62.27 |   1.01 |  +6057% |
+| MatMul      |  87.47 |   1.36 |  +6322% |
+| PReLU       |   2.28 |   0.04 |  +5297% |
+| ReLU        |   2.47 |   0.03 |  +7216% |
+| Scatter     |   1.84 |   0.07 |  +2652% |
+| ScatterSum  |   3.86 |   0.06 |  +5919% |
+| ScatterMax  |   3.86 |   0.08 |  +4790% |
+| SeLU        |   2.71 |   0.04 |  +6952% |
+| Sigmoid     |   2.63 |   0.05 |  +5626% |
+| Softmax     |  27.75 |   0.59 |  +4634% |
+| Softplus    |   3.50 |   0.04 |  +8149% |
+| Sort        |  46.67 |   0.90 |  +5077% |
+| Sum         |  12.19 |   0.62 |  +1866% |
+| SumAll      |   6.95 |   0.45 |  +1428% |
+
+## DUBIOUS CUDA BENCHMARKS (torch.cuda.synchronize() appears to have not been used)
+
 **RTX4090 16GB (Laptop) / 13th Gen Intel Core i9-13950HX @ 2.20 GHz 64GB**
 
 | Operation      | cpu | cuda | cuda/cpu speedup |
