@@ -116,9 +116,9 @@ class BaseBenchmark:
         Call this function after every torch implementation to ensure
         the mps or cuda execution has finished.
         """
-        if self.device.type == "cuda": # self.device == torch.device("cuda") fails if a particular gpu is selected
+        if self.device == "cuda":
             torch.cuda.synchronize()
-        elif self.device.type == "mps":
+        elif self.device == "mps":
             torch.mps.synchronize()
 
     def compile_if_needed(self, fn, **kwargs):
