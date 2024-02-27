@@ -769,96 +769,6 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
-**RTX4090 (Desktop) / 10th Gen Intel Core i9-10940X @ 3.30GHz 128GB**
-
-| Operation                                           | cpu | cuda | cuda/cpu speedup |
-|-----------------------------------------------------|------|------|----------------|
-| Argmax / dim=64x1024x128 axi=0                  |  15.92 |   0.04 | +39326% |
-| Argmax / dim=64x1024x128 axi=1                  |   4.11 |   0.05 |  +7998% |
-| Argmax / dim=64x1024x128 axi=2                  |   3.46 |   0.05 |  +6615% |
-| Argmax / dim=64x128x1024 axi=2                  |   3.20 |   0.04 |  +8608% |
-| BCE / dim=1000000 dim=1000000                   |   3.84 |   0.05 |  +7086% |
-| BCE / dim=100000x32 dim=100000x32               |  10.57 |   0.05 | +19148% |
-| BCE / dim=100000x64x2 dim=100000x64x2           |  40.02 |   0.22 | +17863% |
-| BCE / dim=128x100000 dim=128x100000             |  40.52 |   0.22 | +17958% |
-| Concat / dim=1000000x64 dim=1000000x32 axi=1    |  38.01 |   0.97 |  +3814% |
-| Concat / dim=1000000x64 dim=1000000x128 axi=1   |  86.99 |   1.79 |  +4759% |
-| Concat / dim=1000000x64 dim=1000000x64 axi=0    |  41.79 |   1.20 |  +3376% |
-| Concat / dim=64x1000000 dim=64x1000000 axi=0    |  41.53 |   1.22 |  +3317% |
-| Conv1d / dim=100x256x3 dim=8x3x3                |   0.33 |   0.07 |   +359% |
-| Conv1d / dim=100x256x256 dim=8x3x256            |   5.11 |   0.30 |  +1596% |
-| Conv1d / dim=16x1000x80 dim=128x11x80           |   5.24 |   0.13 |  +4017% |
-| Conv1d / dim=16x1000x3 dim=128x11x3             |   0.69 |   0.11 |   +507% |
-| Conv2d / dim=100x256x256x3 dim=8x3x3x3          |  22.06 |   0.74 |  +2862% |
-| Conv2d / dim=10x256x256x12 dim=8x3x3x12         |   4.15 |   0.18 |  +2247% |
-| Conv2d / dim=1x256x256x128 dim=8x3x3x128        |   3.45 |   0.15 |  +2202% |
-| Conv2d / dim=100x28x28x3 dim=8x3x3x3            |   0.56 |   0.06 |   +832% |
-| Conv2d / dim=1000x28x28x3 dim=8x3x3x3           |   2.79 |   0.11 |  +2449% |
-| Gather / dim=64x256 dim=10                      |   0.02 |   0.03 |    -33% |
-| Gather / dim=64x256 dim=1000                    |   0.11 |   0.04 |   +156% |
-| Gather / dim=64x256 dim=1000000                 | 103.61 |   1.23 |  +8337% |
-| Gather / dim=1024x32 dim=10                     |   0.03 |   0.05 |    -45% |
-| Gather / dim=1024x32 dim=1000                   |   0.06 |   0.04 |    +23% |
-| Gather / dim=1024x32 dim=1000000                |  14.67 |   0.19 |  +7595% |
-| LeakyReLU / dim=128x16x1024                     |   0.43 |   0.03 |  +1519% |
-| LeakyReLU / dim=64x128x1024                     |   4.45 |   0.04 | +11604% |
-| Linear / dim=100x1024x32 dim=32x1024 dim=1024   |  53.35 |   0.59 |  +8943% |
-| Linear / dim=100x1024x64 dim=64x1024 dim=1024   |  56.93 |   0.70 |  +8089% |
-| Linear / dim=100x1024x256 dim=256x1024 dim=1024 |  79.14 |   1.26 |  +6166% |
-| Linear / dim=100x1024x512 dim=512x1024 dim=1024 | 121.64 |   2.46 |  +4854% |
-| Linear / dim=100x1x51200 dim=51200x1 dim=1      |   0.27 |   0.05 |   +401% |
-| MatMul / dim=32x1x1000 dim=32x1000x128          |   0.16 |   0.05 |   +251% |
-| MatMul / dim=1000x64x256 dim=256x32             |   2.53 |   0.07 |  +3323% |
-| MatMul / dim=1000x64x1024 dim=1000x1024x32      |   8.35 |   0.73 |  +1051% |
-| MatMul / dim=1000x1024x64 dim=1000x64x256       | 108.79 |   1.60 |  +6689% |
-| MatMul / dim=64x1000000 dim=1000000x32          |   9.42 |   0.50 |  +1791% |
-| MatMul / dim=1000000x64 dim=64x1024             | 395.58 |   5.23 |  +7468% |
-| PReLU / dim=128x16x1024 dim=1                   |   0.39 |   0.03 |  +1103% |
-| PReLU / dim=64x128x1024 dim=1                   |   4.18 |   0.05 |  +7858% |
-| ReLU / dim=128x16x1024                          |   0.63 |   0.03 |  +2102% |
-| ReLU / dim=64x128x1024                          |   4.32 |   0.04 | +10970% |
-| Scatter / dim=64x16 dim=10                      |   0.01 |   0.02 |    -54% |
-| Scatter / dim=64x16 dim=1000                    |   0.03 |   0.02 |    +30% |
-| Scatter / dim=64x16 dim=1000000                 |   5.03 |   0.14 |  +3531% |
-| Scatter / dim=1024x32 dim=10                    |   0.02 |   0.02 |    -36% |
-| Scatter / dim=1024x32 dim=1000                  |   0.04 |   0.02 |    +47% |
-| Scatter / dim=1024x32 dim=1000000               |   5.92 |   0.17 |  +3423% |
-| ScatterSum / dim=64x16 dim=10                   |   0.02 |   0.05 |    -62% |
-| ScatterSum / dim=64x16 dim=1000                 |   0.03 |   0.04 |    -37% |
-| ScatterSum / dim=64x16 dim=1000000              |   6.75 |   0.11 |  +5789% |
-| ScatterSum / dim=1024x32 dim=10                 |   0.04 |   0.04 |      0% |
-| ScatterSum / dim=1024x32 dim=1000               |   0.06 |   0.05 |    +16% |
-| ScatterSum / dim=1024x32 dim=1000000            |  16.28 |   0.09 | +17776% |
-| ScatterMax / dim=64x16 dim=10                   |   0.02 |   0.04 |    -53% |
-| ScatterMax / dim=64x16 dim=1000                 |   0.02 |   0.04 |    -48% |
-| ScatterMax / dim=64x16 dim=1000000              |   6.60 |   0.19 |  +3439% |
-| ScatterMax / dim=1024x32 dim=10                 |   0.04 |   0.04 |     +1% |
-| ScatterMax / dim=1024x32 dim=1000               |   0.04 |   0.04 |     -7% |
-| ScatterMax / dim=1024x32 dim=1000000            |  16.46 |   0.12 | +13167% |
-| SeLU / dim=128x16x1024                          |   0.77 |   0.04 |  +1917% |
-| SeLU / dim=64x128x1024                          |   4.65 |   0.04 | +11906% |
-| Sigmoid / dim=128x16x1024                       |   0.67 |   0.05 |  +1367% |
-| Sigmoid / dim=64x128x1024                       |   4.60 |   0.05 |  +9782% |
-| Softmax / dim=64x1000000 axi=-1                 |  37.95 |   1.16 |  +3157% |
-| Softmax / dim=1000000x64 axi=-1                 |  27.42 |   0.59 |  +4530% |
-| Softmax / dim=64x16x32x1024 axi=-1              |  14.56 |   0.32 |  +4490% |
-| Softmax / dim=128x16x32x1024 axi=-1             |  28.07 |   0.64 |  +4269% |
-| Softmax / dim=1024x16x32x128 axi=-1             |  27.67 |   0.62 |  +4343% |
-| Softmax / dim=1024x64x32x8 axi=-1               |  30.83 |   0.18 | +17281% |
-| Softplus / dim=128x16x1024                      |   1.28 |   0.05 |  +2674% |
-| Softplus / dim=64x128x1024                      |   5.73 |   0.04 | +14673% |
-| Sort / dim=64x128x1024 axi=0                    |  42.75 |   1.34 |  +3095% |
-| Sort / dim=64x128x1024 axi=1                    |  49.05 |   0.89 |  +5388% |
-| Sort / dim=64x128x1024 axi=2                    |  48.21 |   0.47 | +10100% |
-| Sum / dim=64x128x128x128 axi=0                  |  15.71 |   0.62 |  +2435% |
-| Sum / dim=64x128x128x128 axi=1                  |  13.05 |   0.62 |  +1997% |
-| Sum / dim=64x128x128x128 axi=2                  |  10.13 |   0.63 |  +1515% |
-| Sum / dim=64x128x128x128 axi=3                  |   9.89 |   0.61 |  +1515% |
-| SumAll / dim=64x128x128x128                     |   9.43 |   0.61 |  +1453% |
-| SumAll / dim=1000000                            |   0.04 |   0.03 |    +30% |
-| SumAll / dim=1000000x128                        |   9.09 |   0.58 |  +1460% |
-| SumAll / dim=128x1000000                        |   9.22 |   0.59 |  +1450% |
-
 **Tesla V100 32Go (PCIe) / Intel Xeon Gold 5120 14 cores, 28 threads @ 2.2GHz (Skylake), 60Go**
 
 | Operation                                           | cpu | cuda | cuda/cpu speedup |
@@ -1038,3 +948,93 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 | SumAll / dim=1000000                            |   0.21 |   0.03 |   +528% |
 | SumAll / dim=1000000x128                        |  40.79 |   0.65 |  +6190% |
 | SumAll / dim=128x1000000                        |  40.77 |   0.65 |  +6189% |
+
+**RTX4090 (Desktop) / 10th Gen Intel Core i9-10940X @ 3.30GHz 128GB**
+
+| Operation                                           | cpu | cuda | cuda/cpu speedup |
+|-----------------------------------------------------|------|------|----------------|
+| Argmax / dim=64x1024x128 axi=0                  |  15.92 |   0.04 | +39326% |
+| Argmax / dim=64x1024x128 axi=1                  |   4.11 |   0.05 |  +7998% |
+| Argmax / dim=64x1024x128 axi=2                  |   3.46 |   0.05 |  +6615% |
+| Argmax / dim=64x128x1024 axi=2                  |   3.20 |   0.04 |  +8608% |
+| BCE / dim=1000000 dim=1000000                   |   3.84 |   0.05 |  +7086% |
+| BCE / dim=100000x32 dim=100000x32               |  10.57 |   0.05 | +19148% |
+| BCE / dim=100000x64x2 dim=100000x64x2           |  40.02 |   0.22 | +17863% |
+| BCE / dim=128x100000 dim=128x100000             |  40.52 |   0.22 | +17958% |
+| Concat / dim=1000000x64 dim=1000000x32 axi=1    |  38.01 |   0.97 |  +3814% |
+| Concat / dim=1000000x64 dim=1000000x128 axi=1   |  86.99 |   1.79 |  +4759% |
+| Concat / dim=1000000x64 dim=1000000x64 axi=0    |  41.79 |   1.20 |  +3376% |
+| Concat / dim=64x1000000 dim=64x1000000 axi=0    |  41.53 |   1.22 |  +3317% |
+| Conv1d / dim=100x256x3 dim=8x3x3                |   0.33 |   0.07 |   +359% |
+| Conv1d / dim=100x256x256 dim=8x3x256            |   5.11 |   0.30 |  +1596% |
+| Conv1d / dim=16x1000x80 dim=128x11x80           |   5.24 |   0.13 |  +4017% |
+| Conv1d / dim=16x1000x3 dim=128x11x3             |   0.69 |   0.11 |   +507% |
+| Conv2d / dim=100x256x256x3 dim=8x3x3x3          |  22.06 |   0.74 |  +2862% |
+| Conv2d / dim=10x256x256x12 dim=8x3x3x12         |   4.15 |   0.18 |  +2247% |
+| Conv2d / dim=1x256x256x128 dim=8x3x3x128        |   3.45 |   0.15 |  +2202% |
+| Conv2d / dim=100x28x28x3 dim=8x3x3x3            |   0.56 |   0.06 |   +832% |
+| Conv2d / dim=1000x28x28x3 dim=8x3x3x3           |   2.79 |   0.11 |  +2449% |
+| Gather / dim=64x256 dim=10                      |   0.02 |   0.03 |    -33% |
+| Gather / dim=64x256 dim=1000                    |   0.11 |   0.04 |   +156% |
+| Gather / dim=64x256 dim=1000000                 | 103.61 |   1.23 |  +8337% |
+| Gather / dim=1024x32 dim=10                     |   0.03 |   0.05 |    -45% |
+| Gather / dim=1024x32 dim=1000                   |   0.06 |   0.04 |    +23% |
+| Gather / dim=1024x32 dim=1000000                |  14.67 |   0.19 |  +7595% |
+| LeakyReLU / dim=128x16x1024                     |   0.43 |   0.03 |  +1519% |
+| LeakyReLU / dim=64x128x1024                     |   4.45 |   0.04 | +11604% |
+| Linear / dim=100x1024x32 dim=32x1024 dim=1024   |  53.35 |   0.59 |  +8943% |
+| Linear / dim=100x1024x64 dim=64x1024 dim=1024   |  56.93 |   0.70 |  +8089% |
+| Linear / dim=100x1024x256 dim=256x1024 dim=1024 |  79.14 |   1.26 |  +6166% |
+| Linear / dim=100x1024x512 dim=512x1024 dim=1024 | 121.64 |   2.46 |  +4854% |
+| Linear / dim=100x1x51200 dim=51200x1 dim=1      |   0.27 |   0.05 |   +401% |
+| MatMul / dim=32x1x1000 dim=32x1000x128          |   0.16 |   0.05 |   +251% |
+| MatMul / dim=1000x64x256 dim=256x32             |   2.53 |   0.07 |  +3323% |
+| MatMul / dim=1000x64x1024 dim=1000x1024x32      |   8.35 |   0.73 |  +1051% |
+| MatMul / dim=1000x1024x64 dim=1000x64x256       | 108.79 |   1.60 |  +6689% |
+| MatMul / dim=64x1000000 dim=1000000x32          |   9.42 |   0.50 |  +1791% |
+| MatMul / dim=1000000x64 dim=64x1024             | 395.58 |   5.23 |  +7468% |
+| PReLU / dim=128x16x1024 dim=1                   |   0.39 |   0.03 |  +1103% |
+| PReLU / dim=64x128x1024 dim=1                   |   4.18 |   0.05 |  +7858% |
+| ReLU / dim=128x16x1024                          |   0.63 |   0.03 |  +2102% |
+| ReLU / dim=64x128x1024                          |   4.32 |   0.04 | +10970% |
+| Scatter / dim=64x16 dim=10                      |   0.01 |   0.02 |    -54% |
+| Scatter / dim=64x16 dim=1000                    |   0.03 |   0.02 |    +30% |
+| Scatter / dim=64x16 dim=1000000                 |   5.03 |   0.14 |  +3531% |
+| Scatter / dim=1024x32 dim=10                    |   0.02 |   0.02 |    -36% |
+| Scatter / dim=1024x32 dim=1000                  |   0.04 |   0.02 |    +47% |
+| Scatter / dim=1024x32 dim=1000000               |   5.92 |   0.17 |  +3423% |
+| ScatterSum / dim=64x16 dim=10                   |   0.02 |   0.05 |    -62% |
+| ScatterSum / dim=64x16 dim=1000                 |   0.03 |   0.04 |    -37% |
+| ScatterSum / dim=64x16 dim=1000000              |   6.75 |   0.11 |  +5789% |
+| ScatterSum / dim=1024x32 dim=10                 |   0.04 |   0.04 |      0% |
+| ScatterSum / dim=1024x32 dim=1000               |   0.06 |   0.05 |    +16% |
+| ScatterSum / dim=1024x32 dim=1000000            |  16.28 |   0.09 | +17776% |
+| ScatterMax / dim=64x16 dim=10                   |   0.02 |   0.04 |    -53% |
+| ScatterMax / dim=64x16 dim=1000                 |   0.02 |   0.04 |    -48% |
+| ScatterMax / dim=64x16 dim=1000000              |   6.60 |   0.19 |  +3439% |
+| ScatterMax / dim=1024x32 dim=10                 |   0.04 |   0.04 |     +1% |
+| ScatterMax / dim=1024x32 dim=1000               |   0.04 |   0.04 |     -7% |
+| ScatterMax / dim=1024x32 dim=1000000            |  16.46 |   0.12 | +13167% |
+| SeLU / dim=128x16x1024                          |   0.77 |   0.04 |  +1917% |
+| SeLU / dim=64x128x1024                          |   4.65 |   0.04 | +11906% |
+| Sigmoid / dim=128x16x1024                       |   0.67 |   0.05 |  +1367% |
+| Sigmoid / dim=64x128x1024                       |   4.60 |   0.05 |  +9782% |
+| Softmax / dim=64x1000000 axi=-1                 |  37.95 |   1.16 |  +3157% |
+| Softmax / dim=1000000x64 axi=-1                 |  27.42 |   0.59 |  +4530% |
+| Softmax / dim=64x16x32x1024 axi=-1              |  14.56 |   0.32 |  +4490% |
+| Softmax / dim=128x16x32x1024 axi=-1             |  28.07 |   0.64 |  +4269% |
+| Softmax / dim=1024x16x32x128 axi=-1             |  27.67 |   0.62 |  +4343% |
+| Softmax / dim=1024x64x32x8 axi=-1               |  30.83 |   0.18 | +17281% |
+| Softplus / dim=128x16x1024                      |   1.28 |   0.05 |  +2674% |
+| Softplus / dim=64x128x1024                      |   5.73 |   0.04 | +14673% |
+| Sort / dim=64x128x1024 axi=0                    |  42.75 |   1.34 |  +3095% |
+| Sort / dim=64x128x1024 axi=1                    |  49.05 |   0.89 |  +5388% |
+| Sort / dim=64x128x1024 axi=2                    |  48.21 |   0.47 | +10100% |
+| Sum / dim=64x128x128x128 axi=0                  |  15.71 |   0.62 |  +2435% |
+| Sum / dim=64x128x128x128 axi=1                  |  13.05 |   0.62 |  +1997% |
+| Sum / dim=64x128x128x128 axi=2                  |  10.13 |   0.63 |  +1515% |
+| Sum / dim=64x128x128x128 axi=3                  |   9.89 |   0.61 |  +1515% |
+| SumAll / dim=64x128x128x128                     |   9.43 |   0.61 |  +1453% |
+| SumAll / dim=1000000                            |   0.04 |   0.03 |    +30% |
+| SumAll / dim=1000000x128                        |   9.09 |   0.58 |  +1460% |
+| SumAll / dim=128x1000000                        |   9.22 |   0.59 |  +1450% |
