@@ -104,7 +104,7 @@ class BaseBenchmark:
         tic = time.perf_counter()
         try:
             fn(**kwargs)
-        except NotImplementedError:
+        except (NotImplementedError, RuntimeError):
             return float("nan")
 
         duration = time.perf_counter() - tic
