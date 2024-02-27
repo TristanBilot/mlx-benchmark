@@ -1,11 +1,3 @@
-import multiprocessing as mp
-
-try:
-    mp.set_start_method("spawn", force=True)
-except RuntimeError:
-    pass
-
-import gc
 from argparse import ArgumentParser
 from collections import defaultdict
 from distutils.util import strtobool
@@ -77,8 +69,11 @@ def run(op, backend, iterations):
             [op.run(framework="torch", device="cuda") for _ in range(iterations)]
         )
 
-    op.inputs = None
-    op = None
+    op.clear()
+
+    if backend in ["mps", "cuda"]:
+        torch.mps.empty_cache()
+        torch.cuda.empty_cache()
 
     return duration
 
