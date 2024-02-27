@@ -23,7 +23,7 @@ def calculate_speedup(a, compared_to):
     return percentage_difference * 100
 
 
-def print_benchmark(times, args, reduce_mean=False):
+def print_benchmark(times, backends, reduce_mean=False):
     times = dict(times)
 
     if reduce_mean:
@@ -39,39 +39,28 @@ def print_benchmark(times, args, reduce_mean=False):
         times = new_times
 
     # Column headers
-    headers = []
-    if args.include_mlx:
-        headers.append("mlx_gpu")
-        if args.compile:
-            headers.append("mlx_gpu_compile")
-        if args.include_cpu:
-            headers.append("mlx_cpu")
-    if args.include_mps:
-        headers.append("mps")
-    if args.include_cpu:
-        headers.append("cpu")
-    if args.include_cuda:
-        headers.append("cuda")
+    header_order = ["mlx_gpu", "mlx_gpu_compile", "mlx_cpu", "mps", "cpu", "cuda"]
+    headers = sorted(backends, key=lambda x: header_order.index(x))
 
-    if args.compile and args.include_mlx:
+    if "mlx_gpu_compile" in backends and "mlx_gpu" in backends:
         h = "mlx_gpu_compile/mlx_gpu speedup"
         headers.append(h)
         for k, v in times.items():
             v[h] = calculate_speedup(v["mlx_gpu_compile"], compared_to=v["mlx_gpu"])
 
-    if args.include_mps and args.include_mlx:
+    if "mps" in backends and "mlx_gpu" in backends:
         h = "mlx_gpu/mps speedup"
         headers.append(h)
         for k, v in times.items():
             v[h] = calculate_speedup(v["mlx_gpu"], compared_to=v["mps"])
 
-    if args.include_cpu and args.include_mlx:
+    if "mlx_cpu" in backends and "mlx_gpu" in backends:
         h = "mlx_gpu/mlx_cpu speedup"
         headers.append(h)
         for k, v in times.items():
             v[h] = calculate_speedup(v["mlx_gpu"], compared_to=v["mlx_cpu"])
 
-    if args.include_cpu and args.include_cuda:
+    if "cpu" in backends and "cuda" in backends:
         h = "cuda/cpu speedup"
         headers.append(h)
         for k, v in times.items():
