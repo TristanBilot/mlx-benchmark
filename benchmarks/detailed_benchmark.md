@@ -456,7 +456,7 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 | SumAll / dim=1000000x128                        |   1.62 |   8.57 |   2.42 |   4.55 |    +49% |   +429% |
 | SumAll / dim=128x1000000                        |   1.63 |   8.61 |   2.34 |   4.60 |    +43% |   +427% |
 
-**M2 Max (cores: 4E+8P+38GPU)** mlx 0.4.0 torch 2.2.0
+**M2 Max (cores: 4E+8P+38GPU)** mlx 0.5.0 torch 2.2.1
 
 | Operation                                           | mlx_gpu | mlx_gpu_compile | mlx_cpu | mps | cpu | mlx_gpu_compile/mlx_gpu speedup | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------------------------------------------|-------|---------------|-------|------|------|-------------------------------|-------------------|-----------------------|
