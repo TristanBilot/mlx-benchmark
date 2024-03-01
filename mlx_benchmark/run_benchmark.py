@@ -42,16 +42,16 @@ def run_processes(operations, backends, iterations=5):
     print("\n Average benchmark:")
     print_benchmark(all_times, backends, reduce_mean=True)
 
-def run_mlx_backend(operations, backend, iterations):
+def run_mlx_backend(operations, backend, iterations, ops_per_process=10):
     """
-    Runs all operations on the given backend for a specified number of iterations.
+    Runs all operations on the given backend in a separate process, to reduce memory requirements.
     """
     times = {}
 
     with tqdm(total=len(operations)) as pbar:
-        for i in range(0, len(operations), 10):
+        for i in range(0, len(operations), ops_per_process):
             queue = mp.Queue()
-            p = mp.Process(target=run_backend, args=(operations[i:min(i + 10, len(operations))], backend, iterations, queue))
+            p = mp.Process(target=run_backend, args=(operations[i: min(i + 10, len(operations))], backend, iterations, queue))
             p.start()
             p.join()
             times.update(queue.get())
