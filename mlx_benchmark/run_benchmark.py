@@ -1,3 +1,10 @@
+import multiprocessing as mp
+
+try:
+    mp.set_start_method("spawn", force=True)
+except RuntimeError:
+    pass
+
 from argparse import ArgumentParser
 from collections import defaultdict
 from distutils.util import strtobool
@@ -23,18 +30,52 @@ def run_processes(operations, backends, iterations=5):
 
     for i, backend in enumerate(backends):
         print(f"\nRunning benchmarks on {backend} ({i + 1}/{len(backends)})")
-        with tqdm(total=len(operations) * iterations) as pbar:
-            for op in operations:
-                op_name = type(op).__name__ + " / " + op.args_str
-                duration = run(op, backend, iterations)
-                all_times[op_name][backend] = duration
-                pbar.update(iterations)
+        if 'mlx' in backend:
+            times = run_mlx_backend(operations, backend, iterations)
+        else:
+            times = run_backend(operations, backend, iterations)
+        for op_name, duration in times.items():
+            all_times[op_name][backend] = duration
 
     print("\nDetailed benchmark:")
     print_benchmark(all_times, backends)
     print("\n Average benchmark:")
     print_benchmark(all_times, backends, reduce_mean=True)
 
+def run_mlx_backend(operations, backend, iterations):
+    """
+    Runs all operations on the given backend for a specified number of iterations.
+    """
+    times = {}
+
+    with tqdm(total=len(operations)) as pbar:
+        for i in range(0, len(operations), 10):
+            queue = mp.Queue()
+            p = mp.Process(target=run_backend, args=(operations[i:min(i + 10, len(operations))], backend, iterations, queue))
+            p.start()
+            p.join()
+            times.update(queue.get())
+            queue.close()
+            pbar.update(min(10, len(operations) - i))
+
+    return times
+
+def run_backend(operations, backend, iterations, queue=None):
+    """
+    Runs all operations on the given backend for a specified number of iterations.
+    """
+    times = {}
+
+    op_iterable = tqdm(operations) if queue is None else operations
+
+    for op in op_iterable:
+        op_name = type(op).__name__ + " / " + op.args_str
+        duration = run(op, backend, iterations)
+        times[op_name] = duration
+
+    if queue is None:
+        return times
+    queue.put(times)
 
 def run(op, backend, iterations):
     """
@@ -43,31 +84,19 @@ def run(op, backend, iterations):
  
     if backend == "mlx_gpu":
         mx.set_default_device(mx.gpu)
-        duration = np.mean(
-            [op.run(framework="mlx") for _ in range(iterations)]
-        )
+        duration = np.mean([op.run(framework="mlx") for _ in range(iterations)])
     elif backend == "mlx_gpu_compile":
         mx.set_default_device(mx.gpu)
-        duration = np.mean(
-            [op.run(framework="mlx", compile=True) for _ in range(iterations)]
-        )
+        duration = np.mean([op.run(framework="mlx", compile=True) for _ in range(iterations)])
     elif backend == "mlx_cpu":
         mx.set_default_device(mx.cpu)
-        duration = np.mean(
-            [op.run(framework="mlx") for _ in range(iterations)]
-        )
+        duration = np.mean([op.run(framework="mlx") for _ in range(iterations)])
     elif backend == "cpu":
-        duration = np.mean(
-            [op.run(framework="torch", device="cpu") for _ in range(iterations)]
-        )
+        duration = np.mean([op.run(framework="torch", device="cpu") for _ in range(iterations)])
     elif backend == "mps":
-        duration = np.mean(
-            [op.run(framework="torch", device="mps") for _ in range(iterations)]
-        )
+        duration = np.mean([op.run(framework="torch", device="mps") for _ in range(iterations)])
     elif backend == "cuda":
-        duration = np.mean(
-            [op.run(framework="torch", device="cuda") for _ in range(iterations)]
-        )
+        duration = np.mean([op.run(framework="torch", device="cuda") for _ in range(iterations)])
 
     op.clear()
 
@@ -80,12 +109,12 @@ def run(op, backend, iterations):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--include_cpu", type=strtobool, default="True")
-    parser.add_argument("--include_mps", type=strtobool, default="True")
-    parser.add_argument("--include_cuda", type=strtobool, default="False")
     parser.add_argument("--include_mlx_gpu", type=strtobool, default="True")
-    parser.add_argument("--include_mlx_cpu", type=strtobool, default="True")
     parser.add_argument("--include_mlx_gpu_compile", type=strtobool, default="True")
+    parser.add_argument("--include_mlx_cpu", type=strtobool, default="True")
+    parser.add_argument("--include_mps", type=strtobool, default="True")
+    parser.add_argument("--include_cpu", type=strtobool, default="True")
+    parser.add_argument("--include_cuda", type=strtobool, default="False")
     args = parser.parse_args()
     print(args)
     print(f"Use MLX: {USE_MLX}")
@@ -96,7 +125,7 @@ if __name__ == "__main__":
         assert torch.cuda.is_available(), "CUDA device not found."
 
     backends = [arg.replace("include_", "") for arg, value in vars(args).items() if value]
-
+    
     operations = [
         Argmax(dim1="64x1024x128", axis=0),
         Argmax(dim1="64x1024x128", axis=1),
