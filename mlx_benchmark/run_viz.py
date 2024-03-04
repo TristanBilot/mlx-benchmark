@@ -54,7 +54,7 @@ def plot(file_content, operation):
         dataframes.append(df)
 
     # Extracting table titles and operation values for each table
-    title_pattern = r"\*\*(.*?)\*\*"
+    title_pattern = r"\*\*(.*?)\s*\("
     titles = re.findall(title_pattern, file_content)
 
     # Preparing data for the visualization
