@@ -30,7 +30,7 @@ def run_processes(operations, backends, iterations=5):
 
     for i, backend in enumerate(backends):
         print(f"\nRunning benchmarks on {backend} ({i + 1}/{len(backends)})")
-        if 'mlx' in backend:
+        if "mlx" in backend:
             times = run_mlx_backend(operations, backend, iterations)
         else:
             times = run_backend(operations, backend, iterations)
@@ -42,16 +42,28 @@ def run_processes(operations, backends, iterations=5):
     print("\n Average benchmark:")
     print_benchmark(all_times, backends, reduce_mean=True)
 
+
 def run_mlx_backend(operations, backend, iterations, ops_per_process=10):
     """
     Runs all operations on the given backend in a separate process, to reduce memory requirements.
+
+    ``ops_per_process`` determines the number of ops to run in each process.
+    Decreasing this number decreases the max memory usage.
     """
     times = {}
 
     with tqdm(total=len(operations)) as pbar:
         for i in range(0, len(operations), ops_per_process):
             queue = mp.Queue()
-            p = mp.Process(target=run_backend, args=(operations[i: min(i + 10, len(operations))], backend, iterations, queue))
+            p = mp.Process(
+                target=run_backend,
+                args=(
+                    operations[i : min(i + 10, len(operations))],
+                    backend,
+                    iterations,
+                    queue,
+                ),
+            )
             p.start()
             p.join()
             times.update(queue.get())
@@ -59,6 +71,7 @@ def run_mlx_backend(operations, backend, iterations, ops_per_process=10):
             pbar.update(min(10, len(operations) - i))
 
     return times
+
 
 def run_backend(operations, backend, iterations, queue=None):
     """
@@ -77,26 +90,35 @@ def run_backend(operations, backend, iterations, queue=None):
         return times
     queue.put(times)
 
+
 def run(op, backend, iterations):
     """
     Measures runtime of a single op on the given framework and device specified by backend.
     """
- 
+
     if backend == "mlx_gpu":
         mx.set_default_device(mx.gpu)
         duration = np.mean([op.run(framework="mlx") for _ in range(iterations)])
     elif backend == "mlx_gpu_compile":
         mx.set_default_device(mx.gpu)
-        duration = np.mean([op.run(framework="mlx", compile=True) for _ in range(iterations)])
+        duration = np.mean(
+            [op.run(framework="mlx", compile=True) for _ in range(iterations)]
+        )
     elif backend == "mlx_cpu":
         mx.set_default_device(mx.cpu)
         duration = np.mean([op.run(framework="mlx") for _ in range(iterations)])
     elif backend == "cpu":
-        duration = np.mean([op.run(framework="torch", device="cpu") for _ in range(iterations)])
+        duration = np.mean(
+            [op.run(framework="torch", device="cpu") for _ in range(iterations)]
+        )
     elif backend == "mps":
-        duration = np.mean([op.run(framework="torch", device="mps") for _ in range(iterations)])
+        duration = np.mean(
+            [op.run(framework="torch", device="mps") for _ in range(iterations)]
+        )
     elif backend == "cuda":
-        duration = np.mean([op.run(framework="torch", device="cuda") for _ in range(iterations)])
+        duration = np.mean(
+            [op.run(framework="torch", device="cuda") for _ in range(iterations)]
+        )
 
     op.clear()
 
@@ -124,8 +146,10 @@ if __name__ == "__main__":
     if args.include_cuda:
         assert torch.cuda.is_available(), "CUDA device not found."
 
-    backends = [arg.replace("include_", "") for arg, value in vars(args).items() if value]
-    
+    backends = [
+        arg.replace("include_", "") for arg, value in vars(args).items() if value
+    ]
+
     operations = [
         Argmax(dim1="64x1024x128", axis=0),
         Argmax(dim1="64x1024x128", axis=1),
