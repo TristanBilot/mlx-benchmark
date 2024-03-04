@@ -24,4 +24,4 @@ class Concat(BaseBenchmark):
         a, b = self.inputs
 
         y = torch.cat([a, b], dim=self.kwargs["axis"])
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()

@@ -40,4 +40,4 @@ class BCE(BaseBenchmark):
         a, b = self.a_torch, self.b_torch
 
         y = F.binary_cross_entropy(a, b)
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()

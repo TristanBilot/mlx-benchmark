@@ -34,4 +34,4 @@ class Linear(BaseBenchmark):
         b = self.b_torch
 
         y = F.linear(a, b, c)
-        self.sync_mps_if_needed()
+        self.sync_torch_gpu_if_needed()

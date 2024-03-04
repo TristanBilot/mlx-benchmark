@@ -5,7 +5,6 @@ try:
 except RuntimeError:
     pass
 
-import gc
 from argparse import ArgumentParser
 from collections import defaultdict
 from distutils.util import strtobool
@@ -23,106 +22,133 @@ from utils import print_benchmark
 from operations import *
 
 
-def run_processes(operations, args, iterations=5):
+def run_processes(operations, backends, iterations=5):
     """
-    Runs all operations in serial, on separate processes.
-    Using processes avoids exploding memory within the main process during the bench.
+    Runs all operations, on all backends, for a specified number of iterations.
     """
     all_times = defaultdict(dict)
-    queue = mp.Queue()
 
-    with tqdm(total=len(operations) * iterations) as pbar:
-        for op in operations:
-            op_times = defaultdict(list)
-            op_name = None
-
-            for _ in range(iterations):
-                p = mp.Process(target=run, args=(op, args, queue))
-                p.start()
-
-                times = queue.get()
-                p.join()
-
-                for backend, time in list(times.values())[0].items():
-                    op_times[backend].append(time)
-                op_name = list(times.keys())[0]
-
-                pbar.update(1)
-
-            op_times_mean = {k: np.mean(v) for k, v in op_times.items()}
-            all_times[op_name] = op_times_mean
-
-            # NOTE: without this, memory still increases until the end of the bench.
-            del op
-            gc.collect()
+    for i, backend in enumerate(backends):
+        print(f"\nRunning benchmarks on {backend} ({i + 1}/{len(backends)})")
+        if "mlx" in backend:
+            times = run_mlx_backend(operations, backend, iterations)
+        else:
+            times = run_backend(operations, backend, iterations)
+        for op_name, duration in times.items():
+            all_times[op_name][backend] = duration
 
     print("\nDetailed benchmark:")
-    print_benchmark(all_times, args)
+    print_benchmark(all_times, backends)
     print("\n Average benchmark:")
-    print_benchmark(all_times, args, reduce_mean=True)
+    print_benchmark(all_times, backends, reduce_mean=True)
 
 
-def run(op, args, queue=None):
+def run_mlx_backend(operations, backend, iterations, ops_per_process=10):
     """
-    Measures runtime of a single op on all frameworks and devices included in args.
+    Runs all operations on the given backend in a separate process, to reduce memory requirements.
+
+    ``ops_per_process`` determines the number of ops to run in each process.
+    Decreasing this number decreases the max memory usage.
     """
-    times = times = defaultdict(dict)
-    op_name = type(op).__name__ + " / " + op.args_str
+    times = {}
 
-    # MLX benchmark.
-    if args.include_mlx:
-        # GPU
-        mx.set_default_device(mx.gpu)
-        mlx_time = op.run(framework="mlx")
-        times[op_name]["mlx_gpu"] = mlx_time
+    with tqdm(total=len(operations)) as pbar:
+        for i in range(0, len(operations), ops_per_process):
+            queue = mp.Queue()
+            p = mp.Process(
+                target=run_backend,
+                args=(
+                    operations[i : min(i + 10, len(operations))],
+                    backend,
+                    iterations,
+                    queue,
+                ),
+            )
+            p.start()
+            p.join()
+            times.update(queue.get())
+            queue.close()
+            pbar.update(min(10, len(operations) - i))
 
-        # Compiled GPU kernels
-        if args.compile:
-            mlx_time = op.run(framework="mlx", compile=True)
-            times[op_name]["mlx_gpu_compile"] = mlx_time
+    return times
 
-        # CPU
-        if args.include_cpu:
-            mx.set_default_device(mx.cpu)
-            mlx_time = op.run(framework="mlx")
-            times[op_name]["mlx_cpu"] = mlx_time
 
-    # CPU PyTorch benchmarks.
-    if args.include_cpu:
-        cpu_time = op.run(framework="torch", device=torch.device("cpu"))
-        times[op_name]["cpu"] = cpu_time
+def run_backend(operations, backend, iterations, queue=None):
+    """
+    Runs all operations on the given backend for a specified number of iterations.
+    """
+    times = {}
 
-    # MPS PyTorch benchmarks.
-    if args.include_mps:
-        mps_time = op.run(framework="torch", device=torch.device("mps"))
-        times[op_name]["mps"] = mps_time
+    op_iterable = tqdm(operations) if queue is None else operations
 
-    # CUDA PyTorch benchmark.
-    if args.include_cuda:
-        cuda_time = op.run(framework="torch", device=torch.device("cuda"))
-        times[op_name]["cuda"] = cuda_time
+    for op in op_iterable:
+        op_name = type(op).__name__ + " / " + op.args_str
+        duration = run(op, backend, iterations)
+        times[op_name] = duration
 
     if queue is None:
         return times
     queue.put(times)
 
 
+def run(op, backend, iterations):
+    """
+    Measures runtime of a single op on the given framework and device specified by backend.
+    """
+
+    if backend == "mlx_gpu":
+        mx.set_default_device(mx.gpu)
+        duration = np.mean([op.run(framework="mlx") for _ in range(iterations)])
+    elif backend == "mlx_gpu_compile":
+        mx.set_default_device(mx.gpu)
+        duration = np.mean(
+            [op.run(framework="mlx", compile=True) for _ in range(iterations)]
+        )
+    elif backend == "mlx_cpu":
+        mx.set_default_device(mx.cpu)
+        duration = np.mean([op.run(framework="mlx") for _ in range(iterations)])
+    elif backend == "cpu":
+        duration = np.mean(
+            [op.run(framework="torch", device="cpu") for _ in range(iterations)]
+        )
+    elif backend == "mps":
+        duration = np.mean(
+            [op.run(framework="torch", device="mps") for _ in range(iterations)]
+        )
+    elif backend == "cuda":
+        duration = np.mean(
+            [op.run(framework="torch", device="cuda") for _ in range(iterations)]
+        )
+
+    op.clear()
+
+    if backend in ["mps", "cuda"]:
+        torch.mps.empty_cache()
+        torch.cuda.empty_cache()
+
+    return duration
+
+
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--include_cpu", type=strtobool, default="True")
+    parser.add_argument("--include_mlx_gpu", type=strtobool, default="True")
+    parser.add_argument("--include_mlx_gpu_compile", type=strtobool, default="True")
+    parser.add_argument("--include_mlx_cpu", type=strtobool, default="True")
     parser.add_argument("--include_mps", type=strtobool, default="True")
-    parser.add_argument("--include_mlx", type=strtobool, default="True")
+    parser.add_argument("--include_cpu", type=strtobool, default="True")
     parser.add_argument("--include_cuda", type=strtobool, default="False")
-    parser.add_argument("--compile", type=strtobool, default="True")
     args = parser.parse_args()
     print(args)
     print(f"Use MLX: {USE_MLX}")
 
+    if args.include_mps:
+        assert torch.backends.mps.is_available(), "MPS backend not available."
     if args.include_cuda:
         assert torch.cuda.is_available(), "CUDA device not found."
 
-    if args.include_mps:
-        assert torch.backends.mps.is_available(), "MPS backend not available."
+    backends = [
+        arg.replace("include_", "") for arg, value in vars(args).items() if value
+    ]
 
     operations = [
         Argmax(dim1="64x1024x128", axis=0),
@@ -212,4 +238,4 @@ if __name__ == "__main__":
         SumAll(dim1="128x1000000"),
     ]
 
-    run_processes(operations, args)
+    run_processes(operations, backends)

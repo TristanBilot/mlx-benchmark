@@ -23,6 +23,8 @@ class BaseBenchmark:
         self.kwargs = kwargs
         self.compiled_fn: Callable = None
 
+        self.inputs = None
+
     def compute_inputs(self, framework, device=None):
         """
         Generates the default inputs for all benchmarks.
@@ -70,8 +72,9 @@ class BaseBenchmark:
         Runs the benchmark for a specified number of iterations.
         Measures and records the duration of each forward pass.
         """
-        self.compute_inputs(framework, device)
-        self.additional_preprocessing(framework, device)
+        if self.inputs is None:
+            self.compute_inputs(framework, device)
+            self.additional_preprocessing(framework, device)
 
         if framework == "mlx":
             forward_fn = self.forward_mlx
@@ -104,19 +107,21 @@ class BaseBenchmark:
         tic = time.perf_counter()
         try:
             fn(**kwargs)
-        except NotImplementedError:
+        except (NotImplementedError, RuntimeError):
             return float("nan")
 
         duration = time.perf_counter() - tic
 
         return duration
 
-    def sync_mps_if_needed(self):
+    def sync_torch_gpu_if_needed(self):
         """
         Call this function after every torch implementation to ensure
-        the mps execution has finished.
+        the mps or cuda execution has finished.
         """
-        if self.device == torch.device("mps"):
+        if self.device == "cuda":
+            torch.cuda.synchronize()
+        elif self.device == "mps":
             torch.mps.synchronize()
 
     def compile_if_needed(self, fn, **kwargs):
@@ -129,3 +134,17 @@ class BaseBenchmark:
             self.compiled_fn = mx.compile(fn)
             return self.compiled_fn
         return fn
+
+    def clear(self):
+        self.inputs = None
+        self.y = []
+        for attribute in [
+            "a_torch",
+            "b_torch",
+            "b_mlx",
+            "src",
+            "index",
+            "node_features",
+        ]:
+            if hasattr(self, attribute):
+                delattr(self, attribute)
