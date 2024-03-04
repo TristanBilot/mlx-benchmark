@@ -34,7 +34,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum        |  11.33 |  12.70 |  16.35 |  13.43 |    +44% |    +12% |
 | SumAll     |   6.91 |   6.85 |   7.40 |   7.00 |     +7% |      0% |
 
-**Apple M1 Pro: (2E+8P+16GPU+16GB) - mlx: 0.5.0**
+**M1 Pro (2E+8P+16GPU+16GB) - mlx: 0.5.0**
 
 | Operation       | mlx_gpu | mlx_gpu_compile | mlx_cpu | mps | cpu | mlx_gpu_compile/mlx_gpu speedup | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------|-------|---------------|-------|------|------|-------------------------------|-------------------|-----------------------|
@@ -60,7 +60,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum         |   3.38 |   3.46 |   9.25 |   6.06 |  10.02 |     -2% |    +79% |   +173% |
 | SumAll      |   2.52 |   2.63 |   6.83 |   2.48 |   3.46 |     -4% |     -1% |   +171% |
 
-**M1 Max 64GB** mlx 0.2.0
+**M1 Max (64GB)** mlx 0.2.0
 
 | Operation       | mlx_gpu | mlx_gpu_compile | mlx_cpu | mps | cpu | mlx_gpu_compile/mlx_gpu speedup | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------|-------|---------------|-------|------|------|-------------------------------|-------------------|-----------------------|
@@ -86,7 +86,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum         |   1.75 |   1.74 |   8.87 |   3.10 |  10.35 |     +0% |    +77% |   +406% |
 | SumAll      |   1.36 |   1.34 |   6.63 |   1.50 |   3.36 |     +1% |    +10% |   +389% |
 
-**M2**
+**M2 () - mlx 0.2.0**
 
 | Operation      | mlx_gpu | mlx_cpu | mps | cpu | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |----------------|-------|-------|------|------|-------------------|-----------------------|
@@ -129,28 +129,6 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sort       |   8.50 | 709.04 |  23.19 |  48.95 |   +173% |  +8245% |
 | Sum        |   4.05 |  11.55 |   4.27 |  10.36 |     +5% |   +184% |
 | SumAll     |   2.55 |   6.60 |   2.85 |   3.47 |    +11% |   +158% |
-
-**M2 Max (cores: 4E+8P+38GPU)**
-
-| Operation      | mlx_gpu | mlx_cpu | mps | cpu | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
-|----------------|-------|-------|------|------|-------------------|-----------------------|
-| Argmax     |   0.87 |  11.47 |   1.29 |   7.27 |    +47% |  +1213% |
-| BCE        |   1.31 |  46.26 |   6.81 |   6.27 |   +417% |  +3420% |
-| Concat     |   3.19 |  90.31 |   3.87 |  23.54 |    +21% |  +2728% |
-| Conv1d     |   3.88 |   3.24 |   1.49 | 147.63 |    -61% |    -16% |
-| Conv2d     |   6.88 | 391.73 |   2.39 |  36.21 |    -65% |  +5595% |
-| LeakyReLU  |   0.89 |   1.78 |   0.94 |   0.86 |     +5% |    +99% |
-| Linear     |   6.33 |  45.43 |  13.66 |  75.38 |   +115% |   +618% |
-| MatMul     |  10.35 |  42.33 |  10.73 | 713.08 |     +3% |   +309% |
-| PReLU      |   1.24 |   3.15 |   0.98 |   0.88 |    -21% |   +154% |
-| ReLU       |   0.71 |   0.76 |   0.94 |   0.94 |    +32% |     +7% |
-| SeLU       |   1.91 |  12.00 |   1.00 |   4.51 |    -47% |   +528% |
-| Sigmoid    |   0.47 |  31.06 |   0.74 |   4.46 |    +57% |  +6469% |
-| Softmax    |   2.39 |  38.44 |   6.81 |  23.90 |   +184% |  +1506% |
-| Softplus   |   0.43 |  31.37 |   0.83 |   6.31 |    +91% |  +7129% |
-| Sort       |   3.75 | 699.20 |  10.99 |  41.23 |   +193% | +18550% |
-| Sum        |   2.09 |  11.55 |   2.60 |  10.40 |    +24% |   +453% |
-| SumAll     |   1.41 |   6.60 |   1.94 |   3.48 |    +38% |   +369% |
 
 **M2 Max (cores: 4E+8P+38GPU)** mlx 0.5.0 torch 2.2.1
 
@@ -278,7 +256,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 
 ## CUDA GPUs
 
-**Tesla V100 32Go (PCIe) / Intel Xeon Gold 5120 14 cores / 28 threads @ 2.2GHz (Skylake), 60Go**
+**Tesla V100 PCIe (32Go / Intel Xeon Gold 5120 14 cores / 28 threads @ 2.2GHz (Skylake), 60Go)**
 
 | Operation       | cpu | cuda | cuda/cpu speedup |
 |-----------------|------|------|----------------|
@@ -304,7 +282,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum         |  67.43 |   0.70 |  +9472% |
 | SumAll      |  29.82 |   0.50 |  +5822% |
 
-**Tesla V100 32Go (NVLink) / Intel Xeon Gold 6148 20 cores, 40 threads @ 2.4 GHz (Skylake), 60Go**
+**Tesla V100 NVLink (32Go / Intel Xeon Gold 6148 20 cores, 40 threads @ 2.4 GHz (Skylake), 60Go)**
 
 | Operation       | cpu | cuda | cuda/cpu speedup |
 |-----------------|------|------|----------------|
@@ -330,7 +308,7 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sum         |  69.38 |   0.70 |  +9861% |
 | SumAll      |  31.13 |   0.50 |  +6152% |
 
-**RTX4090 (Desktop) / 10th Gen Intel Core i9-10940X @ 3.30GHz 128GB**
+**RTX4090 ((Desktop) / 10th Gen Intel Core i9-10940X @ 3.30GHz 128GB)**
 
 | Operation       | cpu | cuda | cuda/cpu speedup |
 |-----------------|------|------|----------------|
