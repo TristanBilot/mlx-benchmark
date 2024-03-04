@@ -14,7 +14,7 @@ python run_benchmark.py
 If you propose a CUDA GPU-based benchmark, running the benchmark on `cpu` and `cuda` devices is enough:
 
 ```shell
-python run_benchmark.py --include_mps=False --include_mlx=False --include_cuda=True --include_cpu=True
+python run_benchmark.py --include_mps=False --include_mlx_cpu=False --include_mlx_gpu=False --include_mlx_gpu_compile=False --include_cuda=True
 ```
 
 Once run, 2 tables will be printed. Copy-paste the detailed benchmark into [detailed_benchmark.md](benchmarks/detailed_benchmark.md) and do the same for the average benchmark into [average_benchmark.md](benchmarks/average_benchmark.md). You can then submit a pull request. To ensure consistency in the results, ensure that enough memory is available before running the benchmarks.
