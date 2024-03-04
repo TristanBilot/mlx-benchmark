@@ -41,4 +41,3 @@ class BCE(BaseBenchmark):
 
         y = F.binary_cross_entropy(a, b)
         self.sync_torch_gpu_if_needed()
-

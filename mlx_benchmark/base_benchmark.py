@@ -113,7 +113,7 @@ class BaseBenchmark:
         duration = time.perf_counter() - tic
 
         return duration
-    
+
     def sync_torch_gpu_if_needed(self):
         """
         Call this function after every torch implementation to ensure
@@ -134,10 +134,17 @@ class BaseBenchmark:
             self.compiled_fn = mx.compile(fn)
             return self.compiled_fn
         return fn
-    
+
     def clear(self):
         self.inputs = None
         self.y = []
-        for attribute in ["a_torch", "b_torch", "b_mlx", "src", "index", "node_features"]:
+        for attribute in [
+            "a_torch",
+            "b_torch",
+            "b_mlx",
+            "src",
+            "index",
+            "node_features",
+        ]:
             if hasattr(self, attribute):
                 delattr(self, attribute)
