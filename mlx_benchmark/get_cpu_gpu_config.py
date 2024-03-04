@@ -37,9 +37,9 @@ def get_system_info():
     ram = ram_match.group(1).strip() if ram_match else "Unknown RAM"
     ram = ram.split(" ")[0]
 
-    formatted_output = f"{chipset_model}: {efficiency_cores}E+{performance_cores}P+{gpu_cores}GPU+{ram}GB"
+    formatted_output = f"{chipset_model}: ({efficiency_cores}E+{performance_cores}P+{gpu_cores}GPU+{ram}GB)"
     return formatted_output
 
 
-description = f"({get_system_info()}) - mlx: {mx.__version__}"
+description = f"{get_system_info()} - mlx: {mx.__version__}"
 print(description)
