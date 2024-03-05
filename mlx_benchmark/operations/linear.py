@@ -22,7 +22,7 @@ class Linear(BaseBenchmark):
     def forward_mlx(self, compile=False, **kwargs):
         a, b, c = self.inputs
 
-        fn = lambda x, y, z: x @ y + z
+        fn = lambda x, y, z: mx.addmm(z, x, y)
         fn = self.compile_if_needed(fn, compile=compile)
 
         y = fn(a, b, c)
