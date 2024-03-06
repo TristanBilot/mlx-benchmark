@@ -33,5 +33,6 @@ class Linear(BaseBenchmark):
         a, _, c = self.inputs
         b = self.b_torch
 
+        # NOTE: torch.addmm only supports 2D matrix so we use linear
         y = F.linear(a, b, c)
         self.sync_torch_gpu_if_needed()
