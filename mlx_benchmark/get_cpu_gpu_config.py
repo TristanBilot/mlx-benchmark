@@ -1,6 +1,7 @@
 import subprocess
 import re
 import mlx.core as mx
+import torch
 
 
 def get_system_info():
@@ -42,5 +43,5 @@ def get_system_info():
     return formatted_output
 
 
-description = f"{get_system_info()} - mlx: {mx.__version__}"
+description = f"{get_system_info()} - mlx: {mx.__version__} torch: {torch.__version__}"
 print(description)
