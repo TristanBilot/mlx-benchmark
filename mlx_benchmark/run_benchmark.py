@@ -122,8 +122,10 @@ def run(op, backend, iterations):
 
     op.clear()
 
-    if backend in ["mps", "cuda"]:
+    if backend == "mps":
         torch.mps.empty_cache()
+
+    if backend == "cuda":
         torch.cuda.empty_cache()
 
     return duration
