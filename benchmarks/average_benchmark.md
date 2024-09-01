@@ -337,3 +337,30 @@ Averaged runtime benchmark of mlx operations, measured in `milliseconds`.
 | Sort        |  46.67 |   0.90 |  +5077% |
 | Sum         |  12.19 |   0.62 |  +1866% |
 | SumAll      |   6.95 |   0.45 |  +1428% |
+
+A100 80GB 80GB PCIe ((Server) / Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz, 754GB)
+
+| Operation       | cpu | cuda | cuda/cpu speedup |
+|-----------------|------|------|----------------|
+| Argmax      |   5.04 |   0.06 |  +7856% |
+| BCE         |  18.22 |   0.11 | +16097% |
+| Concat      |  30.47 |   0.74 |  +4036% |
+| Conv1d      | 1029.44 |   0.13 | +811270% |
+| Conv2d      | 531.83 |   0.26 | +205989% |
+| Gather      |   9.59 |   0.30 |  +3045% |
+| LeakyReLU   |   1.68 |   0.06 |  +2579% |
+| Linear      |  47.44 |   2.17 |  +2090% |
+| MatMul      |  50.91 |   2.07 |  +2355% |
+| PReLU       |   1.60 |   0.05 |  +3332% |
+| ReLU        |   1.43 |   0.04 |  +3380% |
+| Scatter     |   1.61 |   0.11 |  +1358% |
+| ScatterSum  |   4.95 |   0.06 |  +7547% |
+| ScatterMax  |   5.39 |   0.33 |  +1511% |
+| SeLU        |   1.82 |   0.04 |  +4259% |
+| Sigmoid     |   3.03 |   0.04 |  +7553% |
+| Softmax     |  18.18 |   0.36 |  +5003% |
+| Softplus    |   2.87 |   0.04 |  +6412% |
+| Sort        |  52.86 |   1.16 |  +4449% |
+| Sum         |  11.38 |   0.37 |  +2947% |
+| SumAll      |   6.85 |   0.29 |  +2226% |
+
