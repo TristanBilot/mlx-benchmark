@@ -816,7 +816,7 @@ Detailed runtime benchmark of mlx operations, measured in `milliseconds`.
 | SumAll / dim=1000000x128                        |   1.50 |   1.50 |   6.30 |   1.67 |   4.19 |     +0% |    +11% |   +318% |
 | SumAll / dim=128x1000000                        |   1.49 |   1.49 |   6.25 |   1.66 |   4.22 |     +0% |    +10% |   +318% |
 
-**M4 Max (cores: 4E+12P+40GPU)** mlx 0.20.0
+**M4 Max (4E+12P+40GPU+128GB) - mlx: 0.20.0
 
 | Operation                                           | mlx_gpu | mlx_gpu_compile | mlx_cpu | mps | cpu | mlx_gpu_compile/mlx_gpu speedup | mlx_gpu/mps speedup | mlx_gpu/mlx_cpu speedup |
 |-----------------------------------------------------|-------|---------------|-------|------|------|-------------------------------|-------------------|-----------------------|
