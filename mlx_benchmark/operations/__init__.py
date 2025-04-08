@@ -1,8 +1,10 @@
-from .linear import Linear
-from .conv import Conv1d, Conv2d
-from .matmul import MatMul
 from .binary_cross_entropy import BCE
 from .concat import Concat
+from .conv import Conv1d, Conv2d
+from .gather_scatter import Gather, Scatter, ScatterSum, ScatterMax
+from .layernorm import LayerNorm
+from .linear import Linear
+from .matmul import MatMul
 from .simple_operations import (
     Sort,
     Argmax,
@@ -16,4 +18,4 @@ from .simple_operations import (
     Sum,
     SumAll,
 )
-from .gather_scatter import Gather, Scatter, ScatterSum, ScatterMax
+

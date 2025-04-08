@@ -180,6 +180,8 @@ if __name__ == "__main__":
         Gather(dim1="1024x32", dim2="10"),
         Gather(dim1="1024x32", dim2="1000"),
         Gather(dim1="1024x32", dim2="1000000"),
+        LayerNorm(dim1="64x128x1024"),
+        LayerNorm(dim1="128x64x1024"),
         LeakyReLU(dim1="128x16x1024"),
         LeakyReLU(dim1="64x128x1024"),
         Linear(dim1="100x1024x32", dim2="32x1024", dim3="1024"),
@@ -239,5 +241,4 @@ if __name__ == "__main__":
         SumAll(dim1="1000000x128"),
         SumAll(dim1="128x1000000"),
     ]
-
     run_processes(operations, backends)
