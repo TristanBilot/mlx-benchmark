@@ -7,7 +7,7 @@ This repo aims to benchmark Apple's MLX operations and layers, on all Apple Sili
 
 Current M chips: `M1`, `M1 Pro`, `M1 Max`, `M2`, `M2 Pro`, `M2 Max`, `M2 Ultra`, `M3`, `M3 Pro`, `M3 Max`, `M3 Ultra`.
 
-Current CUDA GPUs: `RTX4090`, `Tesla V100`.
+Current CUDA GPUs: `RTX4090`, `Tesla V100`, `A100`.
 
 Missing devices: `M1 Ultra`, and `other CUDA GPUs`.
 
