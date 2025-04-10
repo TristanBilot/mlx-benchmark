@@ -18,4 +18,5 @@ from .simple_operations import (
     Sum,
     SumAll,
 )
+from .scaled_dot_product_attention import ScaledDotProductAttention
 
