@@ -73,4 +73,8 @@ python run_benchmark.py --include_mps=False --include_cpu=False --include_mlx_cp
 
 ## Contributing 🚀
 
-If you have a device not yet featured in the benchmark, especially the ones listed below, your PR is welcome to broaden the scope and accuracy of this project.
+Thanks all for keeping the project updated!
+
+<a href="https://github.com/tristanbilot/mlx-benchmark/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=tristanbilot/mlx-benchmark" />
+</a>
