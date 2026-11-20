@@ -5,12 +5,26 @@ This repo aims to benchmark Apple's MLX operations and layers, on all Apple Sili
 
 **Contributions:** Everyone can contribute to the benchmark! If you have a missing device or if you want to add a missing layer/operation, please read the [contribution guidelines](CONTRIBUTING.md).
 
-Current M chips: `M1`, `M1 Pro`, `M1 Max`, `M1 Ultra`, `M2`, `M2 Pro`, `M2 Max`, `M2 Ultra`, `M3`, `M3 Pro`, `M3 Max`, `M3 Ultra`, `M4`, `M4 Pro`, `M4 Max`, `M5`, `M5 Max`.
+Current M chips: `M1`, `M1 Pro`, `M1 Max`, `M1 Ultra`, `M2`, `M2 Pro`, `M2 Max`, `M2 Ultra`, `M3`, `M3 Pro`, `M3 Max`, `M3 Ultra`, `M4`, `M4 Pro`, `M4 Max`, `M5`, `M5 Max`, `M6`.
 
 Current CUDA GPUs: `RTX4090`, `Tesla V100`, `A100`.
 
-> [!NOTE]
-> You can submit your benchmark even for a device that is already listed, provided you use a newer version of MLX. Simply submit a PR by overriding the old benchmark table. Also, most of the existing benchmarks do not include the `mx.compile` feature, which has been recently added to mlx-benchmark.
+
+## Ladder 📊
+
+How fast each chip runs MLX overall, and how MLX on the GPU compares to PyTorch MPS. One chart per operation is in the [figure gallery](images/README.md).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/chip_ranking-dark.png">
+  <img alt="Ranking of Apple Silicon chips by geometric-mean MLX GPU speedup over the M1" src="images/chip_ranking.png">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/mlx_vs_mps_heatmap-dark.png">
+  <img alt="Heatmap of MLX GPU vs PyTorch MPS speedup for each Apple Silicon chip and operation" src="images/mlx_vs_mps_heatmap.png">
+</picture>
+
+All figures are generated from [average_benchmark.md](benchmarks/average_benchmark.md) by [`run_viz.py`](mlx_benchmark/run_viz.py) and are regenerated automatically when a PR is merged.
 
 ## Benchmarks 🧪
 
@@ -21,6 +35,8 @@ For each operation, we measure the runtime of multiple experiments. We propose 2
 * [Detailed benchmark](benchmarks/detailed_benchmark.md): provides the runtime of each experiment. 
 * [Average runtime benchmark](benchmarks/average_benchmark.md): computes the mean of experiments. Easier to navigate, with fewer details.
 
+> [!NOTE]
+> You can submit your benchmark even for a device that is already listed, provided you use a newer version of MLX. Simply submit a PR by overriding the old benchmark table. Also, most of the existing benchmarks do not include the `mx.compile` feature, which has been recently added to mlx-benchmark.
 
 ## Installation 💻
 

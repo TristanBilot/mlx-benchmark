@@ -27,6 +27,27 @@ python mlx_benchmark/get_cpu_gpu_config.py
 >>> (Apple M1 Pro: 2E+8P+16GPU+16GB) - mlx: 0.2.0
 ```
 
+Paste it as the bold title line right above your table, followed by the versions, e.g.:
+
+```markdown
+**M4 Pro (4E+10P+20GPU+24GB)** mlx: 0.24.1 torch: 2.7.0
+
+| Operation | mlx_gpu | ...
+```
+
+The chip name (`M4 Pro`), GPU core count (`20GPU`) and mlx version are read from this line to label your device in the figures.
+
+### Figures
+
+The charts in the README and in [images/](images/README.md) are generated from `average_benchmark.md`, so **you don't need to commit any image**: once your PR is merged, a GitHub Action regenerates them. On your PR, the same action checks that your table can be parsed and uploads a preview of the figures (the `benchmark-figures` artifact on the workflow run).
+
+To check your table and preview the figures locally:
+
+```shell
+python mlx_benchmark/run_viz.py --check   # validate the tables only
+python mlx_benchmark/run_viz.py           # render everything into images/
+```
+
 ## Add a new operation
 
 Many layers and basic operations are still missing in the benchmark. New examples can be easily added to the benchmark, we take here the example of the `concat` operation.
